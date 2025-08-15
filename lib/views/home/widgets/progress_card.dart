@@ -1,4 +1,5 @@
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -40,44 +41,43 @@ class ProgressCard extends StatelessWidget {
             ),
             child: Image.asset(iconPath),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                10.kW,
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: themewhitecolor,
-                    fontWeight: FontWeight.bold,
-                  ),
+          15.kW,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              10.kW,
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: mediumfontsize4,
+                  color: themewhitecolor,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  "Log daily actions to keep the fire alive",
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: themewhitecolor.withAlpha(150)),
+              ),
+              Text(
+                "Log daily actions to keep the fire alive",
+                style: TextStyle(
+                  fontSize: smallfontsize1,
+                  color: themewhitecolor.withAlpha(150),
                 ),
-                5.kH,
-                Row(
-                  children: List.generate(5, (index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 6),
-                      width: 40,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color:
-                            index < completedDays
-                                ? themewhitecolor
-                                : themewhitecolor.withAlpha(100),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    );
-                  }),
-                ),
-              ],
-            ),
+              ),
+              5.kH,
+              Row(
+                children: List.generate(5, (index) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 6),
+                    width: 40,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: index < completedDays
+                          ? themewhitecolor
+                          : themewhitecolor.withAlpha(100),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         ],
       ),

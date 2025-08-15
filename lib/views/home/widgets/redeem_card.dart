@@ -1,4 +1,6 @@
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/font_structures.dart';
+import 'package:carbon_fora/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class RedeemCard extends StatelessWidget {
@@ -11,6 +13,7 @@ class RedeemCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.iconPath,
+   
   });
 
   @override
@@ -24,25 +27,27 @@ class RedeemCard extends StatelessWidget {
         border: Border.all(color: themewhitecolor.withAlpha(100)),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(iconPath, scale: 1.5),
-          const SizedBox(width: 10),
+          Image.asset(iconPath),
+          10.kW,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                style: TextStyle(
+                  fontSize: mediumfontsize3,
                   color: themewhitecolor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 subtitle,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: TextStyle(
                   color: themewhitecolor.withAlpha(150),
                   fontWeight: FontWeight.bold,
-                  fontSize: 10,
+                  fontSize: smallfontsize1,
                 ),
               ),
             ],
