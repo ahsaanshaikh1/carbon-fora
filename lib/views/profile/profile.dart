@@ -11,6 +11,7 @@ import 'package:carbon_fora/views/profile/profile_tab/settings.dart';
 import 'package:carbon_fora/views/profile/profile_tab/terms_condition.dart';
 import 'package:carbon_fora/views/profile/profile_tab/wallet/wallet.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
+import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -228,10 +229,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: ListTile(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => item.destination),
-          );
+          if (item.title == "Change Password" &&
+              !Provider.of<AuthPro>(
+                context,
+                listen: false,
+              ).profile!.provider.contains("EMAIL")) {
+            showSnackBar(context, "You are logged in using social account");
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => item.destination),
+            );
+          }
         },
         leading: CircleAvatar(
           backgroundColor: Colors.white,
