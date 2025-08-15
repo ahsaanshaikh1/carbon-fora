@@ -59,8 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: CircleAvatar(
                             radius: 26,
                             backgroundImage: NetworkImage(
-                              UrlHelper.resolve(pro.profile?.profile) ??
-                                  'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
+                              UrlHelper.resolve(
+                                pro.profile?.profile ??
+                                    'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png',
+                              ),
                             ),
                           ),
                         ),
@@ -85,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 "You've saved 45.2 kg CO₂e",
                                 style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(color: themewhitecolor),
+                                    ?.copyWith(color: themegreycolor),
                               ),
                             ],
                           ),
