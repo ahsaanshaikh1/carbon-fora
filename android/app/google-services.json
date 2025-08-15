@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "659290111643-p691psqd1hfserlb3gl8ffkucnahqtua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carbon_fora",
+            "certificate_hash": "2310cdf0062e8005773707520526eb92de8c9619"
+          }
+        },
+        {
           "client_id": "659290111643-pv751a4o6e3bsnj0vmgv4vit78h1l86s.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "659290111643-pv751a4o6e3bsnj0vmgv4vit78h1l86s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "659290111643-e82dv1laorntc3tu516kq3jnot77f9n1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.carbonFora"
+              }
             }
           ]
         }

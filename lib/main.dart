@@ -3,6 +3,7 @@ import 'package:carbon_fora/route_structure/go_router.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/utils/constants.dart';
 import 'package:carbon_fora/utils/helper/shared_preferences/preference_helper.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -12,6 +13,7 @@ bool showOnBoard = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefHelper.getInstance();
+  await Firebase.initializeApp();
   isLoggedIn = SharedPrefHelper.getBool("isLoggedIn");
   showOnBoard = SharedPrefHelper.getBool("showOnBoard");
   runApp(
