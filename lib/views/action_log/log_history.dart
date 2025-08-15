@@ -201,14 +201,11 @@ class LogCard extends StatelessWidget {
       onTap: () async {
         await _controller.showTooltip();
       },
-      child: Container(
-        margin: EdgeInsets.all(10),
+      child: FilledBox(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(width: 1, color: themewhitecolor),
-        ),
+        color: Colors.white.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(width: 1, color: themewhitecolor),
         child: Row(
           children: [
             CircleAvatar(
