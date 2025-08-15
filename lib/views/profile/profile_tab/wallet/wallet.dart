@@ -413,17 +413,19 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             10.kW,
                             SizedBox(
                               height: 40,
-                              width: 100,
+                              width: 85,
                               child: DropdownButtonFormField(
+                                iconDisabledColor: themewhitecolor,
+                                iconEnabledColor: themewhitecolor,
                                 decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
                                       color: Colors.white, // White border
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
                                       color:
                                           Colors.white, // White border on focus
@@ -431,7 +433,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                     ),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(12),
                                     borderSide: const BorderSide(
                                       color: Colors.white,
                                     ),
@@ -464,17 +466,21 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                        ListView.builder(
+                        20.kH,
+                        ListView.separated(
                           shrinkWrap: true,
+                          primary: false,
                           physics: NeverScrollableScrollPhysics(),
                           itemCount: logs.length,
+                          padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             return LogCard(log: logs[index]);
                           },
+                          separatorBuilder: (context, seprator) {
+                            return 15.kH;
+                          },
                         ),
-                        const SizedBox(height: 12),
-
+                        12.kH,
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: _bottomButton(
@@ -482,7 +488,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             () async {},
                           ),
                         ),
-                        SizedBox(height: 10),
+                        10.kH,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -500,7 +506,6 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10),
                       ],
                     ),
                   ),

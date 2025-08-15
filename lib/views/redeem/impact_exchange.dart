@@ -1,4 +1,5 @@
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/redeem/voucher_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -10,15 +11,16 @@ class ImpactExchange extends StatefulWidget {
 }
 
 class _ImpactExchangeState extends State<ImpactExchange> {
+  int select = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height,
         ),
-        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF1D8AA2), Color(0xFF4834AA)],
@@ -26,90 +28,102 @@ class _ImpactExchangeState extends State<ImpactExchange> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            // Navigator.pop(context);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Color.fromARGB(252, 149, 215, 231),
-                            ),
+        child: Column(
+          children: [
+            10.kH,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          // Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Color.fromARGB(252, 149, 215, 231),
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const Center(
+                    child: Text(
+                      "Impact & Exchange",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    const Center(
-                      child: Text(
-                        "Impact & Exchange",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Row(
+                          children:
+                              [
+                                    _buildChip("All", isSelected: true),
+                                    _buildChip("Fashion"),
+                                    _buildChip("Personal Care"),
+                                    _buildChip("Travel"),
+                                  ]
+                                  .map(
+                                    (chip) => Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: chip,
+                                    ),
+                                  )
+                                  .toList(),
                         ),
                       ),
                     ),
+                    20.kH,
+                    // GridView placed correctly
+                    GridView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.73, // Adjust if needed
+                      ),
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return const BadgeCard(
+                          image: "assets/images/png/travel.png",
+                          title: "Travel Voucher",
+                          description: 'Worth up to \$5\n 50 Credits',
+                        );
+                      },
+                    ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children:
-                        [
-                              _buildChip("All", isSelected: true),
-                              _buildChip("Fashion"),
-                              _buildChip("Personal Care"),
-                              _buildChip("Travel"),
-                            ]
-                            .map(
-                              (chip) => Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: chip,
-                              ),
-                            )
-                            .toList(),
-                  ),
-                ),
-
-                // GridView placed correctly
-                GridView.builder(
-                  padding: const EdgeInsets.only(top: 20, bottom: 50),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.73, // Adjust if needed
-                  ),
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return const BadgeCard(
-                      image: "assets/images/png/travel.png",
-                      title: "Travel Voucher",
-                      description: 'Worth up to \$5\n 50 Credits',
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
