@@ -12,11 +12,15 @@ import 'package:carbon_fora/utils/enum.dart';
 import 'package:carbon_fora/utils/helper/error_handler.dart';
 import 'package:carbon_fora/utils/helper/shared_preferences/preference_helper.dart';
 import 'package:carbon_fora/widgets/snack_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class AuthPro with ChangeNotifier {
+  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isLoadingProfile = true;
   UserModel? profile;
   final firstNameCtrl = TextEditingController();
@@ -129,6 +133,25 @@ class AuthPro with ChangeNotifier {
     } catch (e) {
       Go.pop(context);
       ErrorHandler.catchException(context, e);
+    }
+  }
+
+  googleSignIn({required BuildContext context}) async {
+    try {
+      CustomDailog.loadingDailog(context);
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
+      if (googleUser == null) {
+        Go.pop(context);
+        showSnackBar(context, "Something went wrong");
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      log(googleAuth.idToken ?? "");
+    } catch (e) {
+      Go.pop(context);
+      showSnackBar(context, "Something went wrong");
     }
   }
 

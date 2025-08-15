@@ -267,23 +267,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/png/star-2.png",
-                                  height: 60,
-                                  width: 60,
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  child: SvgPicture.asset(
-                                    "assets/images/svg/google.svg",
-                                    height: 30,
+                            GestureDetector(
+                              onTap: () {
+                                Provider.of<AuthPro>(
+                                  context,
+                                  listen: false,
+                                ).googleSignIn(context: context);
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/png/star-2.png",
+                                    height: 60,
+                                    width: 60,
                                   ),
-                                ),
-                              ],
+                                  Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    child: SvgPicture.asset(
+                                      "assets/images/svg/google.svg",
+                                      height: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             15.kW,
                             Stack(
