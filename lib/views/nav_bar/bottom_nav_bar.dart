@@ -131,7 +131,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                             ? "assets/images/png/nav-icon-4.png"
                                             : "assets/images/png/nav-icon-5.png",
                                         height: 30,
-                                        color: themewhitecolor,
+                                        color: select == index
+                                            ? Palette.primaryColor
+                                            : themewhitecolor,
                                       ),
                                     ],
                                   ),
