@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class MyWalletScreen extends StatefulWidget {
-  const MyWalletScreen({super.key});
+  final bool isBackButtonVisible;
+  const MyWalletScreen({super.key, required this.isBackButtonVisible});
   @override
   State<MyWalletScreen> createState() => _MyWalletScreenState();
 }
@@ -52,29 +53,31 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: Color(0xfe1D8AA2),
-                          ),
-                          color: Color(0xfe1D8AA2),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          color: Color.fromARGB(252, 149, 215, 231),
-                        ),
-                      ),
-                    ),
+                    widget.isBackButtonVisible
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 2,
+                                  color: Color(0xfe1D8AA2),
+                                ),
+                                color: Color(0xfe1D8AA2),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Color.fromARGB(252, 149, 215, 231),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
                     Text(
                       "Wallet",
                       style: TextStyle(

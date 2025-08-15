@@ -1,8 +1,16 @@
+import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
 
-class RedemptionHistory extends StatelessWidget {
+class RedemptionHistory extends StatefulWidget {
   const RedemptionHistory({super.key});
 
+  @override
+  State<RedemptionHistory> createState() => _RedemptionHistoryState();
+}
+
+class _RedemptionHistoryState extends State<RedemptionHistory> {
+  int selectIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +80,7 @@ class RedemptionHistory extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Container(
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border.all(
@@ -81,58 +90,68 @@ class RedemptionHistory extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
-                    children: [
-                      _tabButton("Active", true),
-                      _tabButton("Used", false),
-                      _tabButton("Expired", false),
-                    ],
+                    children: List.generate(
+                      3,
+                      (index) => Expanded(
+                        child: FilledBox(
+                          onTap: () {
+                            setState(() {
+                              selectIndex = index;
+                            });
+                          },
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          color: selectIndex == index
+                              ? Colors.white
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(11),
+                          child: Center(
+                            child: Text(
+                              index == 0
+                                  ? "Active"
+                                  : index == 1
+                                  ? "Used"
+                                  : "Expired",
+                              style: TextStyle(
+                                color: selectIndex == index
+                                    ? Color(0xFF0F6C9C)
+                                    : Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 30),
-
-                // VOUCHER CARDS SECTION HERE
-                Center(
-                  child: Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: [
-                      _voucherCard(
-                        'Travel Voucher',
-                        'assets/images/png//travel.png',
-                      ),
-                      _voucherCard('Fashion', 'assets/images/png/brand.png'),
-                      _voucherCard(
-                        'Travel Voucher',
-                        'assets/images/png/travel.png',
-                      ),
-                    ],
+                30.kH,
+                GridView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: EdgeInsets.zero,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 240,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
                   ),
+                  itemBuilder: (context, index) {
+                    return _voucherCard(
+                      index == 0
+                          ? 'Travel Voucher'
+                          : index == 1
+                          ? "Fashion"
+                          : "Travel Voucher",
+                      index == 0
+                          ? 'assets/images/png/travel.png'
+                          : index == 1
+                          ? "assets/images/png/brand.png"
+                          : "assets/images/png/travel.png",
+                    );
+                  },
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _tabButton(String title, bool selected) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: selected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(11),
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: selected ? Color(0xFF0F6C9C) : Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
             ),
           ),
         ),

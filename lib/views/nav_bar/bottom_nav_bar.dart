@@ -73,14 +73,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
               onPageChanged: onPageChanged,
               children: [
                 HomeScreen(),
-                MyWalletScreen(),
-                ImpactExchange(),
-                LeaderboardScreen(),
+                MyWalletScreen(isBackButtonVisible: false),
+                ImpactExchange(isBackButtonVisible: false),
+                LeaderboardScreen(isBackButtonVisible: false),
                 ProfileScreen(),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+            Positioned(
+              bottom: 20, // bottom se upar shift
+              left: 20,
+              right: 20,
+              // padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: Container(
                 height: 75,
                 padding: EdgeInsets.zero,

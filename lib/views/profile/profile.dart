@@ -24,7 +24,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<MenuItem> menuItems = [
     MenuItem('Edit Profile', Icons.edit, EditProfile()),
-    MenuItem('Wallet', Icons.account_balance_wallet, MyWalletScreen()),
+    MenuItem(
+      'Wallet',
+      Icons.account_balance_wallet,
+      MyWalletScreen(isBackButtonVisible: true),
+    ),
     MenuItem(
       'Change Password',
       Icons.account_balance_wallet,
@@ -58,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 0),
+              const SizedBox(height: 10),
               _buildBackAndProfileSection(context),
               20.kH,
               Consumer<AuthPro>(
@@ -147,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              60.kH,
             ],
           ),
         ),
@@ -165,31 +169,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        left: 14,
-                        top: 8,
-                        bottom: 8,
-                        right: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Color(0xfe1D8AA2)),
-                        color: Color(0xfe1D8AA2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Color.fromARGB(252, 149, 215, 231),
-                      ),
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: InkWell(
+                //     onTap: () {
+                //       Navigator.pop(context);
+                //     },
+                //     child: Container(
+                //       padding: const EdgeInsets.only(
+                //         left: 14,
+                //         top: 8,
+                //         bottom: 8,
+                //         right: 7,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         border: Border.all(width: 2, color: Color(0xfe1D8AA2)),
+                //         color: Color(0xfe1D8AA2),
+                //         borderRadius: BorderRadius.circular(6),
+                //       ),
+                //       child: const Icon(
+                //         Icons.arrow_back_ios,
+                //         color: Color.fromARGB(252, 149, 215, 231),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const Center(
                   child: Text(
                     "My Profile",

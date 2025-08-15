@@ -6,10 +6,9 @@ import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/action_log/action_log.dart';
 import 'package:carbon_fora/views/home/widgets/progress_card.dart';
 import 'package:carbon_fora/views/home/widgets/redeem_card.dart';
-import 'package:carbon_fora/views/home/widgets/stat_card.dart';
-import 'package:carbon_fora/views/profile/profile_tab/badges_gamification.dart';
 import 'package:carbon_fora/views/profile/profile_tab/edit_profile.dart';
 import 'package:carbon_fora/views/profile/profile_tab/leaderboard_screen.dart';
+import 'package:carbon_fora/views/profile/profile_tab/notification.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Go.route(context, LeaderboardScreen());
+                              Go.route(
+                                context,
+                                LeaderboardScreen(isBackButtonVisible: true),
+                              );
                             },
                             child: Image.asset(
                               "assets/images/png/leaderboard.png",
@@ -109,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(width: 10),
                           InkWell(
                             onTap: () {
-                              Go.route(context, BadgesScreen());
+                              Go.route(context, NotificationScreen());
                             },
                             child: Container(
                               height: 35,
