@@ -13,14 +13,14 @@ import 'package:carbon_fora/utils/helper/error_handler.dart';
 import 'package:carbon_fora/utils/helper/shared_preferences/preference_helper.dart';
 import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class AuthPro with ChangeNotifier {
-  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignin = GoogleSignIn.instance;
   bool isLoadingProfile = true;
   UserModel? profile;
   final firstNameCtrl = TextEditingController();
@@ -138,9 +138,10 @@ class AuthPro with ChangeNotifier {
 
   googleSignIn({required BuildContext context}) async {
     try {
+      await googleSignin.initialize();
       CustomDailog.loadingDailog(context);
-      final GoogleSignInAccount? googleUser = await _googleSignIn
-          .authenticate();
+      final GoogleSignInAccount? googleUser = await googleSignin.authenticate();
+
       if (googleUser == null) {
         Go.pop(context);
         showSnackBar(context, "Something went wrong");
@@ -148,7 +149,43 @@ class AuthPro with ChangeNotifier {
       }
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-      log(googleAuth.idToken ?? "");
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      log(googleUser.email);
+
+      log(googleUser.displayName ?? "");
+      List parts = googleUser.displayName!.trim().split(RegExp(r'\s+'));
+
+      final response = await postFunction(
+        {
+          "firstName": parts.isNotEmpty ? parts.first : '',
+          "lastName": parts.length > 1 ? parts.sublist(1).join(' ') : '',
+          "email": googleUser.email,
+          "provider": "GOOGLE",
+        },
+        Api.user.signupProvider,
+        headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
+      );
+      Go.pop(context);
+      if (response != null && response['success'] == true) {
+        SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
+        String userId = response['token'];
+        await storeSession(token: userId, context: context);
+        SharedPrefHelper.putBool("isLoggedIn", true);
+        isLoggedIn = true;
+
+        Go.pop(context);
+        Go.namedReplace(
+          context,
+          RouteName.navbar,
+          params: {"currentIndex": "0"},
+        );
+      } else {
+        Go.pop(context);
+        showSnackBar(context, response['message'] ?? "Something went wrong");
+      }
     } catch (e) {
       Go.pop(context);
       showSnackBar(context, "Something went wrong");

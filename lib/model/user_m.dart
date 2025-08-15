@@ -4,6 +4,7 @@ class UserModel {
   final String lastName;
   final String email;
   final String phone;
+  final List provider;
   final String? profile;
 
   UserModel({
@@ -11,6 +12,7 @@ class UserModel {
     required this.firstName,
     required this.lastName,
     required this.email,
+    required this.provider,
     required this.phone,
     this.profile,
   });
@@ -21,6 +23,7 @@ class UserModel {
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       email: json['email'] ?? '',
+      provider: json['provider'] ?? '',
       phone: json['phone'] ?? '',
       profile: json['profile'],
     );
@@ -34,6 +37,7 @@ class UserModel {
       'email': email,
       'phone': phone,
       'profile': profile,
+      'provider': provider,
     };
   }
 }

@@ -6,9 +6,9 @@ class Api {
   // static String profileBase = "http://192.168.100.7:10000/uploads/";
   // String base = "http://192.168.0.117:1000/api/v1";
 
-  String base = "http://192.168.1.102:5000/api/v1";
+  String base = "http://192.168.100.69:1000/api/v1";
   // String base = "https://backend.carbonfora.com/api/v1";
-  String profileBase = "http://192.168.100.8:2000/public/";
+  String profileBase = "http://192.168.100.69:1000/public/";
   static User user = User();
   static Common common = Common();
   static Seller seller = Seller();
