@@ -135,7 +135,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                             ? "assets/images/svg/nav-icon-4.svg"
                                             : "assets/images/svg/nav-icon-5.svg",
                                         height: 30,
-                                        color: themewhitecolor,
+                                        // color: themewhitecolor,
                                       ),
                                     ],
                                   ),

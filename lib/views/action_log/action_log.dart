@@ -4,6 +4,7 @@ import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/views/action_log/action_submitted.dart';
 import 'package:carbon_fora/views/action_log/end_action.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
@@ -154,7 +155,14 @@ class _LogActionScreenState extends State<LogActionScreen> {
       }
 
       permission = await Geolocator.requestPermission();
-
+      if (!await Geolocator.isLocationServiceEnabled()) {
+        Go.pop(context);
+        showSnackBar(context, "Please enable location service.");
+      }
+      // else if (!await Geolocator.) {
+      //   Go.pop(context);
+      //   showSnackBar(context, "Please enable location service.");
+      // }
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -199,7 +207,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 );
               }
             } else if (_currentStep == 1) {
-              if (image == null) {
+              if (image != null) {
                 showSnackBar(context, "Please take picture first");
               } else {
                 _controller.animateToPage(
@@ -209,7 +217,13 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 );
               }
             } else if (_currentStep == 2) {
-              Go.route(context, EndAction());
+              if (selectedOption == 1 ||
+                  selectedOption == 4 ||
+                  selectedOption == 5) {
+                Go.route(context, ActionSubmitted());
+              } else {
+                Go.route(context, EndAction(selectedOption: selectedOption!));
+              }
             }
           },
           height: 60,
@@ -608,23 +622,24 @@ class _LogActionScreenState extends State<LogActionScreen> {
             //   image: AssetImage("assets/images/map.png"),
             //   fit: BoxFit.cover,
             // ),
-            child: _currentPosition == null
-                ? const Center(child: CircularProgressIndicator())
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: GoogleMap(
-                      onMapCreated: (controller) => _mapController = controller,
-                      initialCameraPosition: CameraPosition(
-                        target: _currentPosition!,
-                        zoom: 16,
-                      ),
-                      markers: _markers,
-                      zoomControlsEnabled: false,
+            // child:
+            // _currentPosition == null
+            //     ? const Center(child: CircularProgressIndicator())
+            //     : ClipRRect(
+            //         borderRadius: BorderRadius.circular(12),
+            //         child: GoogleMap(
+            //           onMapCreated: (controller) => _mapController = controller,
+            //           initialCameraPosition: CameraPosition(
+            //             target: _currentPosition!,
+            //             zoom: 16,
+            //           ),
+            //           markers: _markers,
+            //           zoomControlsEnabled: false,
 
-                      // myLocationEnabled: true,
-                      // myLocationButtonEnabled: true,76
-                    ),
-                  ),
+            //           // myLocationEnabled: true,
+            //           // myLocationButtonEnabled: true,76
+            //         ),
+            //       ),
           ),
           30.kH,
           Container(

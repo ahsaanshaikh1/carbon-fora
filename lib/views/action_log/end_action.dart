@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
@@ -8,24 +9,45 @@ import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/action_log/action_submitted.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EndAction extends StatefulWidget {
-  const EndAction({super.key});
+  final int selectedOption;
+
+  const EndAction({super.key, required this.selectedOption});
 
   @override
   State<EndAction> createState() => _EndActionState();
 }
 
 class _EndActionState extends State<EndAction> {
+  bool showThreshMsg = false;
+  double? maxThreshold;
   final DateTime startTime = DateTime.now();
   late Timer _timer;
   late Duration _elapsed;
+  LatLng? startLocation;
   StreamSubscription<Position>? positionStream;
+  getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    startLocation = LatLng(position.latitude, position.longitude);
+  }
+
   @override
   void initState() {
     super.initState();
+    if (widget.selectedOption == 0) {
+      maxThreshold = 25 / 3.6;
+    } else if (widget.selectedOption == 2) {
+      maxThreshold = 12 / 3.6;
+    }
+    getCurrentLocation();
 
     positionStream =
         Geolocator.getPositionStream(
@@ -34,8 +56,20 @@ class _EndActionState extends State<EndAction> {
             // timeLimit: Duration(seconds: 1), // meters
           ),
         ).listen((Position position) {
+          print(startLocation?.latitude);
+          print(startLocation?.longitude);
           log(position.speed.toString());
+          if (maxThreshold != null && position.speed > maxThreshold!) {
+            setState(() {
+              showThreshMsg = true;
+            });
+          } else if (maxThreshold != null) {
+            setState(() {
+              showThreshMsg = false;
+            });
+          }
         });
+
     _elapsed = DateTime.now().difference(startTime);
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
@@ -225,6 +259,32 @@ class _EndActionState extends State<EndAction> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              !showThreshMsg ? 0.kH : 30.kH,
+              !showThreshMsg
+                  ? 0.kH
+                  : SizedBox(
+                      width: double.infinity,
+                      child: DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        child: Center(
+                          child: AnimatedTextKit(
+                            repeatForever: true,
+                            animatedTexts: [
+                              FadeAnimatedText(
+                                'You are exceding the maximum speed threshold !',
+                                textStyle: TextStyle(color: Colors.redAccent),
+                              ),
+                            ],
+                            onTap: () {
+                              print("Tap Event");
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
