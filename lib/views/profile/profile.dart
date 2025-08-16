@@ -151,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              60.kH,
+              100.kH,
             ],
           ),
         ),

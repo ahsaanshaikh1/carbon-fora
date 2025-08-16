@@ -24,6 +24,7 @@ class ProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 80,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: themewhitecolor.withAlpha(20),
