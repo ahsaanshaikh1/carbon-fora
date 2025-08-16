@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({super.key});
+  final bool isBackButtonVisible;
+  const LeaderboardScreen({super.key, required this.isBackButtonVisible});
 
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
@@ -26,94 +27,98 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          children: [
-            10.kH,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 2,
-                              color: Color(0xfe1D8AA2),
-                            ),
-                            color: Color(0xfe1D8AA2),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Color.fromARGB(252, 149, 215, 231),
-                          ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              10.kH,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    widget.isBackButtonVisible
+                        ? Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Color(0xfe1D8AA2),
+                                    ),
+                                    color: Color(0xfe1D8AA2),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Color.fromARGB(252, 149, 215, 231),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : SizedBox(),
+                    const Center(
+                      child: Text(
+                        "Leaderboard",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                  const Center(
-                    child: Text(
-                      "Leaderboard",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            20.kH,
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Column(
-                    children: [
-                      FilledBox(
-                        padding: EdgeInsets.all(10),
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(11),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            3,
-                            (index) => Expanded(
-                              child: FilledBox(
-                                onTap: () {
-                                  setState(() {
-                                    select = index;
-                                  });
-                                },
-                                padding: const EdgeInsets.all(10),
-                                color: select == index
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(11),
-                                child: Center(
-                                  child: Text(
-                                    index == 0
-                                        ? "Weekly"
-                                        : index == 1
-                                        ? "Monthly"
-                                        : "All Time",
-                                    style: TextStyle(
-                                      color: select == index
-                                          ? Color(0xFF0F6C9C)
-                                          : Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: mediumfontsize3,
+              20.kH,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Column(
+                      children: [
+                        FilledBox(
+                          padding: EdgeInsets.all(10),
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(11),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(
+                              3,
+                              (index) => Expanded(
+                                child: FilledBox(
+                                  onTap: () {
+                                    setState(() {
+                                      select = index;
+                                    });
+                                  },
+                                  padding: const EdgeInsets.all(10),
+                                  color: select == index
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(11),
+                                  child: Center(
+                                    child: Text(
+                                      index == 0
+                                          ? "Weekly"
+                                          : index == 1
+                                          ? "Monthly"
+                                          : "All Time",
+                                      style: TextStyle(
+                                        color: select == index
+                                            ? Color(0xFF0F6C9C)
+                                            : Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: mediumfontsize3,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -121,181 +126,187 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      20.kH,
-                      // Ranking title row with info
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Ranking",
+                        20.kH,
+                        // Ranking title row with info
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Ranking",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white10,
+                                borderRadius: BorderRadius.circular(11),
+                                border: Border.all(color: Colors.white30),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Text(
+                                    'Global',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            // color: Colors.white10,s
+                            borderRadius: BorderRadius.circular(11),
+                            border: Border.all(color: Colors.white30),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "#1 Username",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Credits Earned",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Icon(
+                                    Icons.info_outline,
+                                    size: 16,
+                                    color: Colors.white70,
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "CO₂e Saved",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Ranking Cards
+                        _rankingTile(
+                          "Huzaifa Arain",
+                          "Gold",
+                          152.4,
+                          36.2,
+                          context,
+                        ),
+                        _rankingTile(
+                          "Huzaifa Arain",
+                          "Silver",
+                          152.4,
+                          36.2,
+                          context,
+                        ),
+                        _rankingTile(
+                          "Huzaifa Arain",
+                          "Bronze",
+                          152.4,
+                          36.2,
+                          context,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Your Rank
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Your Rank",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white10,
-                              borderRadius: BorderRadius.circular(11),
-                              border: Border.all(color: Colors.white30),
-                            ),
-                            child: Row(
-                              children: const [
-                                Text(
-                                  'Global',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                SizedBox(width: 4),
-                                Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
-                              ],
-                            ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        _yourRankTile(
+                          "Huzaifa Arain",
+                          41.8,
+                          9.3,
+                          context,
+                          size,
+                        ),
+
+                        const SizedBox(height: 10),
+                        // Most Recycled
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          // color: Colors.white10,s
-                          borderRadius: BorderRadius.circular(11),
-                          border: Border.all(color: Colors.white30),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              "#1 Username",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Credits Earned",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                SizedBox(width: 4),
-                                Icon(
-                                  Icons.info_outline,
-                                  size: 16,
-                                  color: Colors.white70,
-                                ),
-                              ],
-                            ),
-                            Text(
-                              "CO₂e Saved",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Ranking Cards
-                      _rankingTile(
-                        "Huzaifa Arain",
-                        "Gold",
-                        152.4,
-                        36.2,
-                        context,
-                      ),
-                      _rankingTile(
-                        "Huzaifa Arain",
-                        "Silver",
-                        152.4,
-                        36.2,
-                        context,
-                      ),
-                      _rankingTile(
-                        "Huzaifa Arain",
-                        "Bronze",
-                        152.4,
-                        36.2,
-                        context,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Your Rank
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Your Rank",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      _yourRankTile("Huzaifa Arain", 41.8, 9.3, context, size),
-
-                      const SizedBox(height: 10),
-                      // Most Recycled
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          leading: CircleAvatar(
-                            radius: 24,
-                            backgroundColor: Colors.white,
-                            child: Image.asset(
-                              "assets/images/png/man.png",
-                              width: 45,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Colors.white,
+                              child: Image.asset(
+                                "assets/images/png/man.png",
+                                width: 45,
+                              ),
                             ),
-                          ),
-                          title: const Text(
-                            "Huzaifa Arain",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                            title: const Text(
+                              "Huzaifa Arain",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Row(
-                              children: [
-                                Icon(Icons.recycling, color: themegreencolor),
-                                SizedBox(width: 3),
-                                Text(
-                                  "Most Recycled",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
+                            subtitle: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.recycling, color: themegreencolor),
+                                  SizedBox(width: 3),
+                                  Text(
+                                    "Most Recycled",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 class BadgesScreen extends StatefulWidget {
@@ -12,25 +13,24 @@ class _BadgesScreenState extends State<BadgesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Container(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
+      body: Container(
+        // constraints: BoxConstraints(
+        //   minHeight: MediaQuery.of(context).size.height,
+        // ),
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1D8AA2), Color(0xFF4834AA)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF1D8AA2), Color(0xFF4834AA)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SafeArea(
             child: Column(
               children: [
-                SizedBox(height: 20),
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -109,6 +109,7 @@ class _BadgesScreenState extends State<BadgesScreen> {
                     ),
                   ],
                 ),
+                20.kH,
 
                 // GridView placed correctly
                 GridView.count(
@@ -204,7 +205,10 @@ class BadgeCard extends StatelessWidget {
             onPressed: () {},
             child: Text(
               'View Details',
-              style: TextStyle(color: themebluecolor, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: themebluecolor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
