@@ -168,76 +168,83 @@ class _OtpScreenState extends State<OtpScreen> {
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    15.kH,
-                    Center(
-                      child: SvgPicture.asset("assets/images/svg/otp-code.svg"),
-                    ),
-                    30.kH,
-                    Center(
-                      child: Pinput(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        length: 6,
-                        defaultPinTheme: defaultPinTheme,
-                        focusedPinTheme: focusedPinTheme,
-                        submittedPinTheme: submittedPinTheme,
-                        onChanged: (value) {
-                          code = value;
-                        },
-                        showCursor: true,
-                        // ignore: avoid_print
-                        onCompleted: (pin) => print(pin),
-                      ),
-                    ),
-                    30.kH,
-                    const ResendOtpWidgetUser(),
-                    60.kH,
-                    CustomButton(
-                      onTap: () {
-                        if (code.length < 6) {
-                          showSnackBar(context, "Please enter complete OTP");
-                          return;
-                        }
-
-                        String enteredOtp = code;
-                        String storedOtp = Provider.of<AuthPro>(
-                          context,
-                          listen: false,
-                        ).otpCodeValue.toString();
-
-                        print("Entered OTP: $enteredOtp");
-                        print("Stored OTP: $storedOtp");
-
-                        if (storedOtp != enteredOtp) {
-                          showSnackBar(context, "Invalid OTP");
-                          return;
-                        }
-
-                        Provider.of<AuthPro>(
-                          context,
-                          listen: false,
-                        ).verify(context: context, email: widget.email);
-                      },
-                      buttongradientColor: LinearGradient(
-                        colors: [Palette.primaryColor, Palette.secondaryColor],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      height: 60,
-                      borderRadius: BorderRadius.circular(12),
-                      child: const Text(
-                        "Verify",
-                        style: TextStyle(
-                          color: themewhitecolor,
-                          fontSize: mediumfontsize1,
-                          fontWeight: boldfontweight,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      15.kH,
+                      Center(
+                        child: SvgPicture.asset(
+                          "assets/images/svg/otp-code.svg",
                         ),
                       ),
-                    ),
-                  ],
+                      30.kH,
+                      Center(
+                        child: Pinput(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          length: 6,
+                          defaultPinTheme: defaultPinTheme,
+                          focusedPinTheme: focusedPinTheme,
+                          submittedPinTheme: submittedPinTheme,
+                          onChanged: (value) {
+                            code = value;
+                          },
+                          showCursor: true,
+                          // ignore: avoid_print
+                          onCompleted: (pin) => print(pin),
+                        ),
+                      ),
+                      30.kH,
+                      const ResendOtpWidgetUser(),
+                      60.kH,
+                      CustomButton(
+                        onTap: () {
+                          if (code.length < 6) {
+                            showSnackBar(context, "Please enter complete OTP");
+                            return;
+                          }
+
+                          String enteredOtp = code;
+                          String storedOtp = Provider.of<AuthPro>(
+                            context,
+                            listen: false,
+                          ).otpCodeValue.toString();
+
+                          print("Entered OTP: $enteredOtp");
+                          print("Stored OTP: $storedOtp");
+
+                          if (storedOtp != enteredOtp) {
+                            showSnackBar(context, "Invalid OTP");
+                            return;
+                          }
+
+                          Provider.of<AuthPro>(
+                            context,
+                            listen: false,
+                          ).verify(context: context, email: widget.email);
+                        },
+                        buttongradientColor: LinearGradient(
+                          colors: [
+                            Palette.primaryColor,
+                            Palette.secondaryColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        height: 60,
+                        borderRadius: BorderRadius.circular(12),
+                        child: const Text(
+                          "Verify",
+                          style: TextStyle(
+                            color: themewhitecolor,
+                            fontSize: mediumfontsize1,
+                            fontWeight: boldfontweight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

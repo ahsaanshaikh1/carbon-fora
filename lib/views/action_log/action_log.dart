@@ -141,50 +141,41 @@ class _LogActionScreenState extends State<LogActionScreen> {
     _getCurrentLocation();
   }
 
+  XFile? image;
+  final ctrl = TextEditingController();
   Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
 
-    // Check if location service is enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return;
-    }
-
-    // Request location permissions
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return;
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.openLocationSettings();
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      return;
-    }
+      permission = await Geolocator.requestPermission();
 
-    // Get current position
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    setState(() {
-      _currentPosition = LatLng(position.latitude, position.longitude);
-      _markers.add(
-        Marker(
-          markerId: const MarkerId("currentLocation"),
-          position: _currentPosition!,
-          infoWindow: const InfoWindow(title: "You are here"),
-        ),
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
       );
-    });
 
-    // Move camera to current position
-    _mapController?.animateCamera(
-      CameraUpdate.newLatLngZoom(_currentPosition!, 16),
-    );
+      setState(() {
+        _currentPosition = LatLng(position.latitude, position.longitude);
+        _markers.add(
+          Marker(
+            markerId: const MarkerId("currentLocation"),
+            position: _currentPosition!,
+            infoWindow: const InfoWindow(title: "You are here"),
+          ),
+        );
+      });
+
+      _mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(_currentPosition!, 16),
+      );
+    } catch (e) {
+      showSnackBar(context, "Error occured while fetching location.");
+    }
   }
 
   @override
@@ -208,18 +199,22 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 );
               }
             } else if (_currentStep == 1) {
-              _controller.animateToPage(
-                2,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.fastLinearToSlowEaseIn,
-              );
+              if (image == null) {
+                showSnackBar(context, "Please take picture first");
+              } else {
+                _controller.animateToPage(
+                  2,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                );
+              }
             } else if (_currentStep == 2) {
               Go.route(context, EndAction());
             }
           },
           height: 60,
           child: Text(
-            _currentStep == 2 ? "Sumbit Action" : "Next",
+            _currentStep == 2 ? "Submit Action" : "Next",
             style: TextStyle(
               color: Palette.primaryColor,
               fontSize: mediumfontsize2,
@@ -577,8 +572,10 @@ class _LogActionScreenState extends State<LogActionScreen> {
           FilledBox(
             onTap: () async {
               ImagePicker picker = ImagePicker();
-              XFile? image = await picker.pickImage(source: ImageSource.camera);
-              if (image != null) {}
+              image = await picker.pickImage(source: ImageSource.camera);
+              if (image != null) {
+                setState(() {});
+              }
             },
             padding: const EdgeInsets.all(14),
             color: Colors.white12,
@@ -587,7 +584,10 @@ class _LogActionScreenState extends State<LogActionScreen> {
               children: [
                 Icon(Icons.camera_alt_outlined, color: Colors.white),
                 10.kW,
-                Text("Take a Picture", style: TextStyle(color: Colors.white)),
+                Text(
+                  image == null ? "Take a Picture" : "Image captured",
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -601,6 +601,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
             height: 200,
             width: double.infinity,
             color: Colors.white12,
+            padding: EdgeInsets.zero,
             borderRadius: BorderRadius.circular(12),
 
             // image: const DecorationImage(
@@ -609,15 +610,20 @@ class _LogActionScreenState extends State<LogActionScreen> {
             // ),
             child: _currentPosition == null
                 ? const Center(child: CircularProgressIndicator())
-                : GoogleMap(
-                    onMapCreated: (controller) => _mapController = controller,
-                    initialCameraPosition: CameraPosition(
-                      target: _currentPosition!,
-                      zoom: 16,
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: GoogleMap(
+                      onMapCreated: (controller) => _mapController = controller,
+                      initialCameraPosition: CameraPosition(
+                        target: _currentPosition!,
+                        zoom: 16,
+                      ),
+                      markers: _markers,
+                      zoomControlsEnabled: false,
+
+                      // myLocationEnabled: true,
+                      // myLocationButtonEnabled: true,76
                     ),
-                    markers: _markers,
-                    // myLocationEnabled: true,
-                    // myLocationButtonEnabled: true,76
                   ),
           ),
           30.kH,
@@ -701,11 +707,13 @@ class _LogActionScreenState extends State<LogActionScreen> {
               color: Colors.white12,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const TextField(
+            child: TextField(
               maxLines: 5,
+              controller: ctrl,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration.collapsed(
                 hintText: "Add a short description of the action",
+
                 hintStyle: TextStyle(color: Colors.white54),
               ),
             ),
