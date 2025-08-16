@@ -264,6 +264,8 @@ class AuthPro with ChangeNotifier {
           log("User not verified, navigating to OTP screen...");
           setOtpCode(data['otp'].toString());
           Go.pop(context);
+          log(data['otp'] ?? "hi");
+          log(email);
           Go.named(
             context,
             RouteName.otpScreen,
