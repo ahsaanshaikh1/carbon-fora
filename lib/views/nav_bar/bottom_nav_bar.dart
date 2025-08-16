@@ -6,6 +6,7 @@ import 'package:carbon_fora/views/redeem/impact_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
+import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class BottomNavBar extends StatefulWidget {
@@ -85,7 +86,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               right: 20,
               // padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: Container(
-                height: 75,
+                height: 80,
                 padding: EdgeInsets.zero,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -115,8 +116,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                               ? CircleAvatar(
                                   radius: 28,
                                   backgroundColor: themewhitecolor,
-                                  child: Image.asset(
-                                    "assets/images/png/nav-icon-3.png",
+                                  child: SvgPicture.asset(
+                                    "assets/images/svg/nav-icon-3.svg",
                                   ),
                                 )
                               : SizedBox(
@@ -125,18 +126,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image.asset(
+                                      SvgPicture.asset(
                                         index == 0
-                                            ? "assets/images/png/nav-icon-1.png"
+                                            ? "assets/images/svg/nav-icon-1.svg"
                                             : index == 1
-                                            ? "assets/images/png/nav-icon-2.png"
+                                            ? "assets/images/svg/nav-icon-2.svg"
                                             : index == 3
-                                            ? "assets/images/png/nav-icon-4.png"
-                                            : "assets/images/png/nav-icon-5.png",
+                                            ? "assets/images/svg/nav-icon-4.svg"
+                                            : "assets/images/svg/nav-icon-5.svg",
                                         height: 30,
-                                        color: select == index
-                                            ? Palette.primaryColor
-                                            : themewhitecolor,
+                                        color: themewhitecolor,
                                       ),
                                     ],
                                   ),

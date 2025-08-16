@@ -11,6 +11,7 @@ import 'package:carbon_fora/views/profile/profile_tab/leaderboard_screen.dart';
 import 'package:carbon_fora/views/profile/profile_tab/notification.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
@@ -218,9 +219,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     color: themeblackcolor,
                                                   ),
                                                 ),
-                                                Image.asset(
-                                                  "assets/images/png/plant-clr.png",
-                                                  width: 50,
+                                                SvgPicture.asset(
+                                                  "assets/images/svg/carbon-credit.svg",
+                                                  width: 40,
                                                 ),
                                               ],
                                             ),
@@ -277,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           sigmaY: 10,
                           content: FilledBox(
                             height: 150,
-                            width: size.width / 100 * 80,
+                            width: size.width / 100 * 70,
                             padding: EdgeInsets.all(10),
                             borderRadius: BorderRadius.circular(10),
                             color: themewhitecolor,
