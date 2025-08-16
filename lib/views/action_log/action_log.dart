@@ -12,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class ActiveDot extends StatelessWidget {
   final int activeIndex;
@@ -69,6 +71,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
   GoogleMapController? _mapController;
   LatLng? _currentPosition;
   final Set<Marker> _markers = {};
+  DateTime date = DateTime.now();
   List materialsNam = [
     "Aluminum Cans",
     "Aluminum Ingot",
@@ -101,6 +104,36 @@ class _LogActionScreenState extends State<LogActionScreen> {
     "Value Earned: PKR 1.4076",
     "Value Earned: PKR 1.2240",
     "Value Earned: PKR 0.6732",
+  ];
+  List secHandNam = [
+    "Wool",
+    "Acrylic",
+    "Viscose",
+    "Cotton",
+    "Silk",
+    "Polyester",
+    "Polyurethane",
+    "Flax linen",
+  ];
+  List secHandSavedEmission = [
+    "CO₂e Saved: 46 kg",
+    "CO₂e Saved: 38 kg",
+    "CO₂e Saved: 30 kg",
+    "CO₂e Saved: 28 kg",
+    "CO₂e Saved: 25 kg",
+    "CO₂e Saved: 21 kg",
+    "CO₂e Saved: 20 kg",
+    "CO₂e Saved: 15 kg",
+  ];
+  List secHandEarning = [
+    "Value Earned: PKR 0.282",
+    "Value Earned: PKR 0.233",
+    "Value Earned: PKR 0.184",
+    "Value Earned: PKR 0.171",
+    "Value Earned: PKR 0.153",
+    "Value Earned: PKR 0.129",
+    "Value Earned: PKR 0.122",
+    "Value Earned: PKR 0.092",
   ];
   @override
   void initState() {
@@ -302,7 +335,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
             ),
             20.kH,
             GridView.builder(
-              itemCount: 4,
+              itemCount: 6,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -327,32 +360,47 @@ class _LogActionScreenState extends State<LogActionScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            10.kW,
-                            Icon(
-                              index == 0
-                                  ? Icons.directions_bike
-                                  : index == 1
-                                  ? Icons.recycling
-                                  : index == 2
-                                  ? Icons.directions_walk
-                                  : Icons.directions_transit,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                            6.kW,
-                            Text(
-                              index == 0
-                                  ? "Bike"
-                                  : index == 1
-                                  ? "Recycle"
-                                  : index == 2
-                                  ? "Walk"
-                                  : "Take Bus/Train",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
+                        Expanded(
+                          child: Row(
+                            children: [
+                              10.kW,
+                              Icon(
+                                index == 0
+                                    ? Icons.directions_bike
+                                    : index == 1
+                                    ? Icons.recycling
+                                    : index == 2
+                                    ? Icons.directions_walk
+                                    : index == 3
+                                    ? Icons.directions_transit
+                                    : index == 4
+                                    ? Icons.change_circle
+                                    : Icons.eco,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                              6.kW,
+                              Expanded(
+                                child: Text(
+                                  index == 0
+                                      ? "Bike"
+                                      : index == 1
+                                      ? "Recycle"
+                                      : index == 2
+                                      ? "Walk"
+                                      : index == 3
+                                      ? "Take Bus/Train"
+                                      : index == 4
+                                      ? "Buying Secondhand"
+                                      : "Tree Plantation",
+                                  maxLines: 1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         Row(
                           children: [
@@ -378,7 +426,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
             selectedOption == null ? 0.kH : 20.kH,
             selectedOption == null
                 ? 0.kH
-                : selectedOption != 1
+                : selectedOption != 1 && selectedOption != 4
                 ? Column(
                     children: List.generate(
                       2,
@@ -405,10 +453,60 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                       : "Value Earned: PKR 0.000403",
                                   style: const TextStyle(color: Colors.white),
                                 )
+                              : selectedOption == 5
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 10 kg"
+                                      : "Value Earned: PKR 0.0612",
+                                  style: const TextStyle(color: Colors.white),
+                                )
                               : 0.kH,
                         ),
                       ),
                     ),
+                  )
+                : selectedOption == 4
+                ? ListView.builder(
+                    itemCount: 8,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index1) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            secHandNam[index1],
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          10.kH,
+                          Column(
+                            children: List.generate(
+                              2,
+                              (indx) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0,
+                                ),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white12,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    indx == 0
+                                        ? secHandSavedEmission[index1]
+                                        : secHandEarning[index1],
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          10.kH,
+                        ],
+                      );
+                    },
                   )
                 : ListView.builder(
                     itemCount: 9,
@@ -464,6 +562,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
   }
 
   Widget uploadProof() {
+    date = DateTime.now();
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -476,6 +575,11 @@ class _LogActionScreenState extends State<LogActionScreen> {
           ),
           20.kH,
           FilledBox(
+            onTap: () async {
+              ImagePicker picker = ImagePicker();
+              XFile? image = await picker.pickImage(source: ImageSource.camera);
+              if (image != null) {}
+            },
             padding: const EdgeInsets.all(14),
             color: Colors.white12,
             borderRadius: BorderRadius.circular(12),
@@ -512,8 +616,8 @@ class _LogActionScreenState extends State<LogActionScreen> {
                       zoom: 16,
                     ),
                     markers: _markers,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
+                    // myLocationEnabled: true,
+                    // myLocationButtonEnabled: true,76
                   ),
           ),
           30.kH,
@@ -537,7 +641,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Feb 16, 2025",
+                        DateFormat("MMM d, yyyy").format(date),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -562,7 +666,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "10:00 PM",
+                        DateFormat("hh:mm a").format(date),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
