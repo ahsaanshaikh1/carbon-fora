@@ -68,15 +68,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               top: 20,
               left: 16,
               child: Container(
-                height: 45,
-                width: 45,
+                height: 55,
+                width: 55,
                 decoration: BoxDecoration(
                   color: themewhitecolor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
-                  child: IconButton(
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       if (currentIndex == 3) {
                         _pageController.animateToPage(
                           2,
@@ -97,7 +97,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         );
                       }
                     },
-                    icon: Icon(Icons.arrow_back_ios),
+                    child: Icon(Icons.arrow_back_ios),
                   ),
                 ),
               ),

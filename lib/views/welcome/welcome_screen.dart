@@ -5,6 +5,7 @@ import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -66,8 +67,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              "assets/images/png/welcome.png",
+            SvgPicture.asset(
+              "assets/images/svg/welcome.svg",
               height: 300,
               width: double.infinity,
             ),

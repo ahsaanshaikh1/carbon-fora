@@ -54,9 +54,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 180,
-                    width: 180,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 200,
+                    width: 200,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -64,9 +64,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 250,
-                    width: 250,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 300,
+                    width: 300,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -83,8 +83,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         onTap: () {
                           Go.pop(context);
                         },
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
