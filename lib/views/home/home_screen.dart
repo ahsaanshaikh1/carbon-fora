@@ -10,8 +10,11 @@ import 'package:carbon_fora/views/profile/profile_tab/edit_profile.dart';
 import 'package:carbon_fora/views/profile/profile_tab/leaderboard_screen.dart';
 import 'package:carbon_fora/views/profile/profile_tab/notification.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
@@ -362,8 +365,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 12.kH,
                 InkWell(
-                  onTap: () {
-                    Go.route(context, LogActionScreen());
+                  onTap: () async {
+                    bool serviceEnabled =
+                        await Geolocator.isLocationServiceEnabled();
+                    if (!serviceEnabled) {
+                      await Geolocator.openLocationSettings();
+                    }
+
+                    await Geolocator.requestPermission();
+                    if (!await Geolocator.isLocationServiceEnabled()) {
+                      showSnackBar(context, "Please enable location service.");
+                    } else if (!await Permission.location.isGranted) {
+                      showSnackBar(
+                        context,
+                        "Please provide location permission.",
+                      );
+                    } else {
+                      Go.route(context, LogActionScreen());
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),

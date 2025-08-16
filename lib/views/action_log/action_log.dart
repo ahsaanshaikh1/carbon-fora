@@ -149,20 +149,8 @@ class _LogActionScreenState extends State<LogActionScreen> {
       bool serviceEnabled;
       LocationPermission permission;
 
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        await Geolocator.openLocationSettings();
-      }
-
-      permission = await Geolocator.requestPermission();
-      if (!await Geolocator.isLocationServiceEnabled()) {
-        Go.pop(context);
-        showSnackBar(context, "Please enable location service.");
-      }
-      // else if (!await Geolocator.) {
-      //   Go.pop(context);
-      //   showSnackBar(context, "Please enable location service.");
-      // }
+     
+     
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
