@@ -149,8 +149,6 @@ class _LogActionScreenState extends State<LogActionScreen> {
       bool serviceEnabled;
       LocationPermission permission;
 
-     
-     
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
@@ -195,7 +193,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 );
               }
             } else if (_currentStep == 1) {
-              if (image != null) {
+              if (image == null) {
                 showSnackBar(context, "Please take picture first");
               } else {
                 _controller.animateToPage(
@@ -332,7 +330,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
             ),
             20.kH,
             GridView.builder(
-              itemCount: 6,
+              itemCount: 8,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -372,7 +370,11 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                     ? Icons.directions_transit
                                     : index == 4
                                     ? Icons.change_circle
-                                    : Icons.eco,
+                                    : index == 5
+                                    ? Icons.eco
+                                    : index == 6
+                                    ? Icons.water_drop
+                                    : Icons.local_dining,
                                 color: Colors.white,
                                 size: 28,
                               ),
@@ -389,7 +391,11 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                       ? "Take Bus/Train"
                                       : index == 4
                                       ? "Buying Secondhand"
-                                      : "Tree Plantation",
+                                      : index == 5
+                                      ? "Tree Plantation"
+                                      : index == 6
+                                      ? "Refill Water Bottles"
+                                      : "Plant Based Meal",
                                   maxLines: 1,
                                   softWrap: true,
                                   overflow: TextOverflow.ellipsis,
@@ -455,6 +461,20 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                   indx == 0
                                       ? "CO₂e Saved: 10 kg"
                                       : "Value Earned: PKR 0.0612",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 6
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 2.4 kg"
+                                      : "Value Earned: PKR 0.014688",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 7
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 31.34 kg"
+                                      : "Value Earned: PKR 0.1918008",
                                   style: const TextStyle(color: Colors.white),
                                 )
                               : 0.kH,
@@ -610,24 +630,23 @@ class _LogActionScreenState extends State<LogActionScreen> {
             //   image: AssetImage("assets/images/map.png"),
             //   fit: BoxFit.cover,
             // ),
-            // child:
-            // _currentPosition == null
-            //     ? const Center(child: CircularProgressIndicator())
-            //     : ClipRRect(
-            //         borderRadius: BorderRadius.circular(12),
-            //         child: GoogleMap(
-            //           onMapCreated: (controller) => _mapController = controller,
-            //           initialCameraPosition: CameraPosition(
-            //             target: _currentPosition!,
-            //             zoom: 16,
-            //           ),
-            //           markers: _markers,
-            //           zoomControlsEnabled: false,
+            child: _currentPosition == null
+                ? const Center(child: CircularProgressIndicator())
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: GoogleMap(
+                      onMapCreated: (controller) => _mapController = controller,
+                      initialCameraPosition: CameraPosition(
+                        target: _currentPosition!,
+                        zoom: 16,
+                      ),
+                      markers: _markers,
+                      zoomControlsEnabled: false,
 
-            //           // myLocationEnabled: true,
-            //           // myLocationButtonEnabled: true,76
-            //         ),
-            //       ),
+                      // myLocationEnabled: true,
+                      // myLocationButtonEnabled: true,76
+                    ),
+                  ),
           ),
           30.kH,
           Container(
