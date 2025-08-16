@@ -10,6 +10,7 @@ import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/custom_text_field.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -43,9 +44,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 180,
-                    width: 180,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 200,
+                    width: 200,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -53,9 +54,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 250,
-                    width: 250,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 300,
+                    width: 300,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -72,8 +73,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         onTap: () {
                           Go.pop(context);
                         },
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
@@ -131,7 +132,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         15.kH,
                         Center(
-                          child: Image.asset("assets/images/png/forgot.png"),
+                          child: SvgPicture.asset(
+                            "assets/images/svg/frogot-pass.svg",
+                          ),
                         ),
                         35.kH,
                         CustomTextField(

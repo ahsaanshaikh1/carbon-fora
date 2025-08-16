@@ -53,9 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 180,
-                    width: 180,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 200,
+                    width: 200,
+                    color: themewhitecolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -63,9 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 250,
-                    width: 250,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 300,
+                    width: 300,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -82,8 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         onTap: () {
                           Go.pop(context);
                         },
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
@@ -279,15 +279,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   Image.asset(
                                     "assets/images/png/star-2.png",
-                                    height: 60,
-                                    width: 60,
+                                    height: 70,
+                                    width: 70,
+                                    fit: BoxFit.cover,
                                   ),
                                   Positioned(
                                     left: 0,
                                     right: 0,
                                     child: SvgPicture.asset(
                                       "assets/images/svg/google.svg",
-                                      height: 30,
+                                      height: 40,
                                     ),
                                   ),
                                 ],
@@ -299,15 +300,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Image.asset(
                                   "assets/images/png/star-2.png",
-                                  height: 60,
-                                  width: 60,
+                                  height: 70,
+                                  width: 70,
+                                  fit: BoxFit.cover,
                                 ),
                                 Positioned(
                                   left: 0,
                                   right: 0,
                                   child: SvgPicture.asset(
                                     "assets/images/svg/apple.svg",
-                                    height: 30,
+                                    height: 40,
                                   ),
                                 ),
                               ],
@@ -318,15 +320,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Image.asset(
                                   "assets/images/png/star-2.png",
-                                  height: 60,
-                                  width: 60,
+                                  height: 70,
+                                  width: 70,
+                                  fit: BoxFit.cover,
                                 ),
                                 Positioned(
                                   left: 0,
                                   right: 0,
                                   child: SvgPicture.asset(
                                     "assets/images/svg/facebook.svg",
-                                    height: 30,
+                                    height: 40,
                                   ),
                                 ),
                               ],

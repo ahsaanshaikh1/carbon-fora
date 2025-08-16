@@ -7,7 +7,7 @@
     <application
         android:label="Carbon Fora"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB2t4hOvy4D0fX0nb8T_By3xp4ibdkjWTQ"/>
         <activity
             android:name=".MainActivity"

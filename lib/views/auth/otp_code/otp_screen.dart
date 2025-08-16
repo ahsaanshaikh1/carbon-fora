@@ -9,6 +9,7 @@ import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
@@ -83,9 +84,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 180,
-                    width: 180,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 200,
+                    width: 200,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -93,9 +94,9 @@ class _OtpScreenState extends State<OtpScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 250,
-                    width: 250,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 300,
+                    width: 300,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -112,8 +113,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         onTap: () {
                           Go.pop(context);
                         },
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
@@ -172,7 +173,9 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: Column(
                   children: [
                     15.kH,
-                    Center(child: Image.asset("assets/images/png/otp.png")),
+                    Center(
+                      child: SvgPicture.asset("assets/images/svg/otp-code.svg"),
+                    ),
                     30.kH,
                     Center(
                       child: Pinput(

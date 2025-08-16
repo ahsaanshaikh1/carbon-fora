@@ -4,6 +4,7 @@ import 'package:carbon_fora/provider/auth_pro.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
@@ -77,9 +78,9 @@ class _ForgotOtpScreenState extends State<ForgotOtpScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 180,
-                    width: 180,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 200,
+                    width: 200,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -87,9 +88,9 @@ class _ForgotOtpScreenState extends State<ForgotOtpScreen> {
                   left: -30,
                   top: -20,
                   child: FilledBox(
-                    height: 250,
-                    width: 250,
-                    color: themegreycolor.withOpacity(.1),
+                    height: 300,
+                    width: 300,
+                    color: themegreycolor.withAlpha(10),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -106,8 +107,8 @@ class _ForgotOtpScreenState extends State<ForgotOtpScreen> {
                         onTap: () {
                           Go.pop(context);
                         },
-                        height: 50,
-                        width: 50,
+                        height: 55,
+                        width: 55,
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
@@ -166,7 +167,9 @@ class _ForgotOtpScreenState extends State<ForgotOtpScreen> {
                 child: Column(
                   children: [
                     15.kH,
-                    Center(child: Image.asset("assets/images/png/otp.png")),
+                    Center(
+                      child: SvgPicture.asset("assets/images/svg/otp-code.svg"),
+                    ),
                     30.kH,
                     Center(
                       child: Pinput(
