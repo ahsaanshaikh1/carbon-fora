@@ -6,7 +6,6 @@ import 'package:carbon_fora/views/redeem/impact_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
-import 'package:flutter_svg/svg.dart';
 
 // ignore: must_be_immutable
 class BottomNavBar extends StatefulWidget {
@@ -81,10 +80,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ],
             ),
             Positioned(
-              bottom: 20, // bottom se upar shift
+              bottom: 20,
               left: 20,
               right: 20,
-              // padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
               child: Container(
                 height: 80,
                 padding: EdgeInsets.zero,
@@ -96,8 +94,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   ),
                   gradient: LinearGradient(
                     colors: [
-                      themewhitecolor.withAlpha(80),
-                      themewhitecolor.withAlpha(80),
+                      themewhitecolor.withAlpha(50),
+                      themewhitecolor.withAlpha(50),
                     ],
                   ),
                 ),
@@ -114,27 +112,27 @@ class _BottomNavBarState extends State<BottomNavBar> {
                           },
                           child: index == 2
                               ? CircleAvatar(
-                                  radius: 28,
+                                  radius: 30,
                                   backgroundColor: themewhitecolor,
-                                  child: SvgPicture.asset(
-                                    "assets/images/svg/nav-icon-3.svg",
+                                  child: Image.asset(
+                                    "assets/images/png/nav-icon-3.png",
                                   ),
                                 )
                               : SizedBox(
-                                  width: 75,
-                                  height: 75,
+                                  width: 65,
+                                  height: 65,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      SvgPicture.asset(
+                                      Image.asset(
                                         index == 0
-                                            ? "assets/images/svg/nav-icon-1.svg"
+                                            ? "assets/images/png/nav-icon-1.png"
                                             : index == 1
-                                            ? "assets/images/svg/nav-icon-2.svg"
+                                            ? "assets/images/png/nav-icon-2.png"
                                             : index == 3
-                                            ? "assets/images/svg/nav-icon-4.svg"
-                                            : "assets/images/svg/nav-icon-5.svg",
-                                        height: 30,
+                                            ? "assets/images/png/nav-icon-4.png"
+                                            : "assets/images/png/nav-icon-5.png",
+                                        height: 25,
                                         color: themewhitecolor,
                                       ),
                                     ],

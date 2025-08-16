@@ -379,6 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
+                    height: 70,
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -387,6 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: Border.all(color: themewhitecolor.withAlpha(100)),
                     ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           height: 40,
@@ -409,6 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
+                            5.kH,
                             Image.asset("assets/images/png/earned.png"),
                           ],
                         ),
