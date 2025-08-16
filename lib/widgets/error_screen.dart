@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class ErrorScreen extends StatefulWidget {
   const ErrorScreen({super.key});
@@ -22,18 +21,15 @@ class _ErrorScreenState extends State<ErrorScreen> {
                 alignment: Alignment.topCenter,
                 child: Text(
                   "Page Not Found",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Lottie.asset(
-                  "assets/images/animated/error.json",
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.center,
+              //   child: Lottie.asset(
+              //     "assets/images/animated/error.json",
+              //   ),
+              // ),
             ],
           ),
         ),

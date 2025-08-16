@@ -62,7 +62,10 @@ class AuthPro with ChangeNotifier {
       if (context.mounted) Go.pop(context);
 
       if (response != null) {
-        showSnackBar(context, response['message'] ?? 'Something went wrong');
+        showTopAlertInfo(
+          text: response['message'] ?? 'Something went wrong',
+          context: context,
+        );
 
         if (response['success'] == true) {
           emailValue = email;
@@ -71,7 +74,10 @@ class AuthPro with ChangeNotifier {
           if (token != null) {
             storeSessionTemp(token: token);
           } else {
-            showSnackBar(context, "Token missing from response");
+            showTopAlertInfo(
+              text: "Token missing from response",
+              context: context,
+            );
             return;
           }
 
@@ -93,7 +99,10 @@ class AuthPro with ChangeNotifier {
       }
     } catch (e) {
       if (context.mounted) Go.pop(context);
-      showSnackBar(context, "Something went wrong: ${e.toString()}");
+      showTopAlertError(
+        text: "Something went wrong: ${e.toString()}",
+        context: context,
+      );
       ErrorHandler.catchException(context, e);
     }
   }
@@ -111,7 +120,10 @@ class AuthPro with ChangeNotifier {
         if (context.mounted) {
           storeSession(token: data['token'], context: context);
           Go.pop(context);
-          showSnackBar(context, "Verification Successful!");
+          showTopAlertSuccess(
+            text: "Verification Successful!",
+            context: context,
+          );
           Go.namedReplace(
             context,
             RouteName.navbar,
@@ -184,11 +196,14 @@ class AuthPro with ChangeNotifier {
         );
       } else {
         Go.pop(context);
-        showSnackBar(context, response['message'] ?? "Something went wrong");
+        showTopAlertError(
+          text: response['message'] ?? "Something went wrong",
+          context: context,
+        );
       }
     } catch (e) {
       Go.pop(context);
-      showSnackBar(context, "Something went wrong");
+      showTopAlertError(text: "Something went wrong", context: context);
     }
   }
 
@@ -203,7 +218,7 @@ class AuthPro with ChangeNotifier {
       );
       if (response != null && response['success'] == true) {
         otpCodeValue = response['otp'].toString();
-        showSnackBar(context, response['message']);
+        showTopAlertSuccess(text: response['message'], context: context);
         // await storeSessionTemp(token: response['token']);
 
         Go.pop(context);
@@ -240,7 +255,7 @@ class AuthPro with ChangeNotifier {
 
     if (data != null && data['success'] == true) {
       if (context.mounted) {
-        showSnackBar(context, data['message']);
+        showTopAlertSuccess(text: data['message'], context: context);
         SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
         String userId = data['token'];
 
@@ -307,7 +322,10 @@ class AuthPro with ChangeNotifier {
         storeSessionTemp(token: token);
         setOtpCode(data['otp'].toString());
 
-        showSnackBar(context, data['message'] ?? "OTP sent successfully");
+        showTopAlertSuccess(
+          text: data['message'] ?? "OTP sent successfully",
+          context: context,
+        );
 
         Go.named(
           context,
@@ -315,14 +333,17 @@ class AuthPro with ChangeNotifier {
           params: {'otp': data['otp'].toString(), 'email': email},
         );
       } else {
-        showSnackBar(
-          context,
-          data?['message'] ?? "Invalid email or request failed",
+        showTopAlertInfo(
+          text: data?['message'] ?? "Invalid email or request failed",
+          context: context,
         );
       }
     } catch (e) {
       Go.pop(context);
-      showSnackBar(context, "Something went wrong: ${e.toString()}");
+      showTopAlertError(
+        text: "Something went wrong: ${e.toString()}",
+        context: context,
+      );
       ErrorHandler.catchException(context, e);
     }
   }
@@ -347,7 +368,7 @@ class AuthPro with ChangeNotifier {
           // storeSessionTemp(
           //   token: token,
           // );
-          showSnackBar(context, data['message']);
+          showTopAlertSuccess(text: data['message'], context: context);
           Go.namedReplace(context, RouteName.loginScreen);
         }
       } else {
@@ -408,7 +429,7 @@ class AuthPro with ChangeNotifier {
           tokenKey: SharedPrefHelper.utils.authorizedToken,
         );
         if (data['success'] == true) {
-          showSnackBar(context, data['message']);
+          showTopAlertSuccess(text: data['message'], context: context);
           getProfile();
           Go.pop(context);
           Go.pop(context);
@@ -432,7 +453,7 @@ class AuthPro with ChangeNotifier {
           tokenKey: SharedPrefHelper.utils.authorizedToken,
         );
         if (data['success'] == true) {
-          showSnackBar(context, data['message']);
+          showTopAlertSuccess(text: data['message'], context: context);
           getProfile();
           Go.pop(context);
           Go.pop(context);
@@ -465,7 +486,7 @@ class AuthPro with ChangeNotifier {
         headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
       );
       if (response != null && response['success'] == true) {
-        showSnackBar(context, response['message']);
+        showTopAlertSuccess(text: response['message'], context: context);
         Go.pop(context);
         Go.pop(context);
       } else {
@@ -494,7 +515,7 @@ class AuthPro with ChangeNotifier {
       GoRouter.of(context).goNamed(RouteName.welcomeScreen);
     } catch (e) {
       Navigator.pop(context);
-      showSnackBar(context, "Logout failed. Try again.");
+      showTopAlertError(text: "Logout failed. Try again.", context: context);
     }
   }
 
