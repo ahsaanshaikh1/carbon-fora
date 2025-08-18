@@ -2,7 +2,6 @@ import 'package:carbon_fora/provider/auth_pro.dart';
 import 'package:carbon_fora/utils/helper/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
@@ -11,7 +10,6 @@ import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
 import 'package:carbon_fora/widgets/custom_text_field.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
-import 'package:carbon_fora/widgets/outlined_box.dart';
 import 'package:provider/provider.dart';
 
 class NewPasswordScreen extends StatefulWidget {
@@ -41,15 +39,24 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 15.kH,
-                OutlinedBox(
+                FilledBox(
                   onTap: () {
                     Go.pop(context);
                   },
-                  height: 40,
-                  width: 40,
-                  color: themegreycolor,
-                  shape: BoxShape.circle,
-                  child: const Icon(Icons.arrow_back, color: themewhitecolor),
+                  height: 55,
+                  width: 55,
+                  borderRadius: BorderRadius.circular(20),
+                  padding: EdgeInsets.zero,
+                  color: themewhitecolor.withOpacity(0.2),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Center(
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        color: themegreycolor,
+                      ),
+                    ),
+                  ),
                 ),
                 40.kH,
                 const Text(
@@ -73,7 +80,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 200),
+            padding: const EdgeInsets.only(top: 220),
             child: FilledBox(
               height: double.infinity,
               width: double.infinity,

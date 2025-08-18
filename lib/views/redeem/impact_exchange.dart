@@ -1,3 +1,4 @@
+import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/redeem/voucher_detail.dart';
@@ -12,9 +13,11 @@ class ImpactExchange extends StatefulWidget {
 }
 
 class _ImpactExchangeState extends State<ImpactExchange> {
-  int select = 0;
+  String selectedChip = "All"; // Default selected chip
+
   @override
   Widget build(BuildContext context) {
+    final chips = ["All", "Fashion", "Personal Care", "Travel"];
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -73,9 +76,7 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
-
+              20.kH,
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -85,22 +86,23 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15.0),
                           child: Row(
-                            children:
-                                [
-                                      _buildChip("All", isSelected: true),
-                                      _buildChip("Fashion"),
-                                      _buildChip("Personal Care"),
-                                      _buildChip("Travel"),
-                                    ]
-                                    .map(
-                                      (chip) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 8,
-                                        ),
-                                        child: chip,
-                                      ),
-                                    )
-                                    .toList(),
+                            children: chips
+                                .map(
+                                  (chip) => Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: _buildChip(
+                                      chip,
+                                      isSelected: selectedChip == chip,
+                                      onTap: () {
+                                        setState(() {
+                                          selectedChip =
+                                              chip; // Update selected chip
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
                       ),
@@ -112,16 +114,16 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                         physics: NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 0.73, // Adjust if needed
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          mainAxisExtent: 290,
                         ),
                         itemCount: 4,
                         itemBuilder: (context, index) {
                           return const BadgeCard(
                             image: "assets/images/png/travel.png",
                             title: "Travel Voucher",
-                            description: 'Worth up to \$5\n 50 Credits',
+                            description: 'Worth up to \$5\n50 Credits',
                           );
                         },
                       ),
@@ -136,21 +138,28 @@ class _ImpactExchangeState extends State<ImpactExchange> {
     );
   }
 
-  Widget _buildChip(String label, {bool isSelected = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.white : Colors.transparent,
-        border: Border.all(color: Colors.white30),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? Colors.blue.shade800 : Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          letterSpacing: 2,
+  Widget _buildChip(
+    String label, {
+    bool isSelected = false,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          border: Border.all(color: Colors.white30),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.blue.shade800 : Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            letterSpacing: 2,
+          ),
         ),
       ),
     );
@@ -184,29 +193,29 @@ class BadgeCard extends StatelessWidget {
             backgroundColor: themewhitecolor,
             backgroundImage: AssetImage(image),
           ),
-          SizedBox(height: 10),
+          10.kH,
           Text(
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 4),
+          4.kH,
           Text(
             description,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 10),
+          10.kH,
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
@@ -217,20 +226,17 @@ class BadgeCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30),
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => VoucherDetail()),
-              );
+              Go.route(context, VoucherDetail());
             },
             child: Text(
               'Redeem Now',
               style: TextStyle(
-                color: const Color.fromARGB(255, 5, 98, 175),
+                color: Palette.primaryColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 10),
+          8.kH,
           Text(
             "Vouchers are fulfilled instantly via email/SMS. No delivery required.",
             maxLines: 2,

@@ -13,12 +13,12 @@ class RedeemCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.iconPath,
-   
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 70,
       width: 180,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -26,29 +26,34 @@ class RedeemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: themewhitecolor.withAlpha(100)),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(iconPath),
-          10.kW,
-          Column(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: mediumfontsize3,
-                  color: themewhitecolor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: themewhitecolor.withAlpha(150),
-                  fontWeight: FontWeight.bold,
-                  fontSize: smallfontsize1,
-                ),
+              Image.asset(iconPath),
+              10.kW,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: mediumfontsize3,
+                      color: themewhitecolor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: themewhitecolor.withAlpha(150),
+                      fontWeight: FontWeight.bold,
+                      fontSize: smallfontsize1,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

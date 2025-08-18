@@ -1,4 +1,6 @@
 import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/profile/profile_tab/badges_gamification.dart';
 import 'package:carbon_fora/views/profile/profile_tab/carbon_academy.dart';
@@ -10,7 +12,9 @@ import 'package:carbon_fora/views/profile/profile_tab/privacy_policy.dart';
 import 'package:carbon_fora/views/profile/profile_tab/settings.dart';
 import 'package:carbon_fora/views/profile/profile_tab/terms_condition.dart';
 import 'package:carbon_fora/views/profile/profile_tab/wallet/wallet.dart';
+import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
+import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,30 +27,58 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<MenuItem> menuItems = [
-    MenuItem('Edit Profile', Icons.edit, EditProfile()),
+    MenuItem(
+      'Edit Profile',
+      "assets/images/png/edit-profile.png",
+      EditProfile(),
+    ),
     MenuItem(
       'Wallet',
-      Icons.account_balance_wallet,
+      "assets/images/png/wallet.png",
       MyWalletScreen(isBackButtonVisible: true),
     ),
     MenuItem(
       'Change Password',
-      Icons.account_balance_wallet,
+      "assets/images/png/change-pass.png",
       ChangePasswordScreen(),
     ),
-    MenuItem('Carbon Academy', Icons.school, CarbonAcademy()),
-    MenuItem('Badges & Gamification', Icons.emoji_events, BadgesScreen()),
-    MenuItem('Settings', Icons.settings, SettingScreen()),
-    MenuItem('Notification', Icons.notifications, NotificationScreen()),
-    MenuItem('Privacy Policy', Icons.privacy_tip, PrivacyPolicy()),
-    MenuItem('Terms & Condition', Icons.description, TermsCondition()),
-    MenuItem('Help / Support', Icons.headset_mic, HelpSupport()),
+    MenuItem(
+      'Carbon Academy',
+      "assets/images/png/carbon-academy.png",
+      CarbonAcademy(),
+    ),
+    MenuItem(
+      'Badges & Gamification',
+      "assets/images/png/badge.png",
+      BadgesScreen(),
+    ),
+    MenuItem('Settings', "assets/images/png/setting.png", SettingScreen()),
+    MenuItem(
+      'Notification',
+      "assets/images/png/notifications.png",
+      NotificationScreen(),
+    ),
+    MenuItem(
+      'Privacy Policy',
+      "assets/images/png/privacy-policy.png",
+      PrivacyPolicy(),
+    ),
+    MenuItem(
+      'Terms & Condition',
+      "assets/images/png/terms-condition.png",
+      TermsCondition(),
+    ),
+    MenuItem(
+      'Help / Support',
+      "assets/images/png/help-support.png",
+      HelpSupport(),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Container(
         constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height,
@@ -63,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              _buildBackAndProfileSection(context),
+              _buildBackAndProfileSection(context, size),
               20.kH,
               Consumer<AuthPro>(
                 builder: (context, pro, child) {
@@ -159,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildBackAndProfileSection(BuildContext context) {
+  Widget _buildBackAndProfileSection(BuildContext context, size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -208,10 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   alignment: Alignment.centerRight,
                   child: CustomIconButton(
                     onTap: () {
-                      Provider.of<AuthPro>(
-                        context,
-                        listen: false,
-                      ).logout(context);
+                      logout(size);
                     },
                     child: CircleAvatar(
                       radius: 20,
@@ -247,8 +276,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         },
         leading: CircleAvatar(
+          radius: 24,
           backgroundColor: Colors.white,
-          child: Icon(item.icon, color: Color(0xFF0A94D2), size: 30),
+          child: Image.asset(item.icon, height: 22),
         ),
         title: Text(
           item.title,
@@ -262,11 +292,115 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  Future<Object?> logout(Size size) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          scrollable: true,
+          surfaceTintColor: themewhitecolor,
+          backgroundColor: themewhitecolor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
+          titlePadding: const EdgeInsets.all(24),
+          actionsPadding: const EdgeInsets.all(0),
+          buttonPadding: const EdgeInsets.all(0),
+          title: Form(
+            child: SizedBox(
+              width: size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Log Out From Status",
+                      textScaleFactor: 1.0,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: themeblackcolor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  6.kH,
+                  const Center(
+                    child: Text(
+                      "Exit your current status to disconnect, refresh, and stay secure.",
+                      textScaleFactor: 1.0,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: themeblackcolor,
+                        fontSize: mediumfontsize3,
+                      ),
+                    ),
+                  ),
+                  20.kH,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledBox(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          height: 55,
+                          color: themewhitecolor,
+                          padding: EdgeInsets.zero,
+                          boxShadow: const [
+                            BoxShadow(color: themegreycolor, blurRadius: 10),
+                          ],
+                          child: const Center(
+                            child: Text(
+                              "Cancel",
+                              textScaleFactor: 1.0,
+                              style: TextStyle(
+                                fontSize: mediumfontsize4,
+                                fontWeight: boldfontweight,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      20.kW,
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () {
+                            Provider.of<AuthPro>(
+                              context,
+                              listen: false,
+                            ).logout(context);
+                          },
+                          height: 55,
+                          borderRadius: BorderRadius.circular(12),
+                          child: const Text(
+                            "Yes, Logout",
+                            textScaleFactor: 1.0,
+                            style: TextStyle(
+                              color: themewhitecolor,
+                              fontSize: mediumfontsize4,
+                              fontWeight: boldfontweight,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MenuItem {
   final String title;
-  final IconData icon;
+  final String icon;
   final Widget destination;
 
   MenuItem(this.title, this.icon, this.destination);

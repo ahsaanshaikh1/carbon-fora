@@ -7,7 +7,6 @@ import 'package:carbon_fora/views/action_log/action_log.dart';
 import 'package:carbon_fora/views/home/widgets/progress_card.dart';
 import 'package:carbon_fora/views/home/widgets/redeem_card.dart';
 import 'package:carbon_fora/views/profile/profile_tab/edit_profile.dart';
-import 'package:carbon_fora/views/profile/profile_tab/leaderboard_screen.dart';
 import 'package:carbon_fora/views/profile/profile_tab/notification.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:carbon_fora/widgets/snack_bar.dart';
@@ -101,20 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              Go.route(
-                                context,
-                                LeaderboardScreen(isBackButtonVisible: true),
-                              );
-                            },
-                            child: Image.asset(
-                              "assets/images/png/leaderboard.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          InkWell(
-                            onTap: () {
                               Go.route(context, NotificationScreen());
                             },
                             child: Container(
@@ -199,7 +184,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               index == 0
                                   ? SuperTooltip(
                                       showBarrier: true,
-                                      showDropBoxFilter: true,
+                                      barrierColor: Colors.black.withOpacity(
+                                        0.6,
+                                      ),
                                       sigmaX: 10,
                                       sigmaY: 10,
                                       content: FilledBox(
@@ -276,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         10.kW,
                         SuperTooltip(
                           showBarrier: true,
-                          showDropBoxFilter: true,
+                          barrierColor: Colors.black.withOpacity(0.6),
                           sigmaX: 10,
                           sigmaY: 10,
                           content: FilledBox(
@@ -398,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
-                    height: 70,
+                    height: 85,
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -406,52 +393,58 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: themewhitecolor.withAlpha(100)),
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            color: themewhitecolor.withAlpha(50),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.asset("assets/images/png/shield.png"),
-                        ),
-                        15.kW,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Text(
-                              "First Ride",
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(
+                            Container(
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                color: themewhitecolor.withAlpha(50),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                "assets/images/png/shield.png",
+                              ),
+                            ),
+                            15.kW,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "First Ride",
+                                  style: Theme.of(context).textTheme.labelLarge
+                                      ?.copyWith(
+                                        color: themewhitecolor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                5.kH,
+                                Image.asset("assets/images/png/earned.png"),
+                              ],
+                            ),
+                            Spacer(),
+                            Container(
+                              height: 25,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: themewhitecolor.withAlpha(40),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Level 1",
+                                  style: TextStyle(
+                                    fontSize: smallfontsize2,
                                     color: themewhitecolor,
                                     fontWeight: FontWeight.bold,
                                   ),
-                            ),
-                            5.kH,
-                            Image.asset("assets/images/png/earned.png"),
-                          ],
-                        ),
-                        Spacer(),
-                        Container(
-                          height: 20,
-                          width: 60,
-                          decoration: BoxDecoration(
-                            color: themewhitecolor.withAlpha(40),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Level 1",
-                              style: TextStyle(
-                                fontSize: smallfontsize2,
-                                color: themewhitecolor,
-                                fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),

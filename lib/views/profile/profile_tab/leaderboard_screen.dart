@@ -392,7 +392,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                 10.kW,
                 SuperTooltip(
                   showBarrier: true,
-                  showDropBoxFilter: true,
+                  barrierColor: Colors.black.withOpacity(0.6),
                   sigmaX: 10,
                   sigmaY: 10,
                   content: FilledBox(
@@ -512,7 +512,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     10.kW,
                     SuperTooltip(
                       showBarrier: true,
-                      showDropBoxFilter: true,
+                      barrierColor: Colors.black.withOpacity(0.6),
                       sigmaX: 10,
                       sigmaY: 10,
                       content: FilledBox(

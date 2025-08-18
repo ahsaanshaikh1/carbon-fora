@@ -74,30 +74,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   color: themewhitecolor,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      if (currentIndex == 3) {
-                        _pageController.animateToPage(
-                          2,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (currentIndex == 2) {
-                        _pageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (currentIndex == 1) {
-                        _pageController.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    },
-                    child: Icon(Icons.arrow_back_ios),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (currentIndex == 3) {
+                          _pageController.animateToPage(
+                            2,
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                          );
+                        } else if (currentIndex == 2) {
+                          _pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                          );
+                        } else if (currentIndex == 1) {
+                          _pageController.animateToPage(
+                            0,
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      },
+                      child: Icon(Icons.arrow_back_ios, size: 25),
+                    ),
                   ),
                 ),
               ),
