@@ -1,4 +1,7 @@
+import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/views/profile/profile_tab/contact_support/contact_screen.dart';
+import 'package:carbon_fora/views/profile/profile_tab/contact_support/faq_screen.dart';
 import 'package:flutter/material.dart';
 
 class HelpSupport extends StatefulWidget {
@@ -60,12 +63,22 @@ class _HelpSupportState extends State<HelpSupport> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    _buildSupportOption(title: "Contact", onTap: () {}),
+                    _buildSupportOption(
+                      title: "Contact",
+                      onTap: () {
+                        Go.route(context, ContactScreen());
+                      },
+                    ),
                     _buildSupportOption(
                       title: "Send us an E-mail",
                       onTap: () {},
                     ),
-                    _buildSupportOption(title: "FAQs", onTap: () {}),
+                    _buildSupportOption(
+                      title: "FAQs",
+                      onTap: () {
+                        Go.route(context, FaqsScreen());
+                      },
+                    ),
                   ],
                 ),
               ),

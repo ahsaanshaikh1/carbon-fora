@@ -118,10 +118,13 @@ class _OtpScreenState extends State<OtpScreen> {
                         borderRadius: BorderRadius.circular(20),
                         padding: EdgeInsets.zero,
                         color: themewhitecolor.withOpacity(0.2),
-                        child: Center(
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            color: themegreycolor,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Center(
+                            child: const Icon(
+                              Icons.arrow_back_ios,
+                              color: themegreycolor,
+                            ),
                           ),
                         ),
                       ),

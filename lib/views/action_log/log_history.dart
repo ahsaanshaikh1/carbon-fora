@@ -168,12 +168,12 @@ class LogCard extends StatelessWidget {
     SuperTooltip(
       controller: _controller,
       showBarrier: true,
-      showDropBoxFilter: true,
+      barrierColor: Colors.black.withOpacity(0.6),
       sigmaX: 10,
       sigmaY: 10,
       content: FilledBox(
         height: 150,
-        width: 400,
+        width: 350,
         padding: EdgeInsets.all(8),
         borderRadius: BorderRadius.circular(10),
         color: themewhitecolor,

@@ -48,7 +48,7 @@ class StatCard extends StatelessWidget {
                   10.kW,
                   SuperTooltip(
                     showBarrier: true,
-                    showDropBoxFilter: true,
+                    barrierColor: Colors.black.withOpacity(0.6),
                     sigmaX: 10,
                     sigmaY: 10,
                     content: const Text(

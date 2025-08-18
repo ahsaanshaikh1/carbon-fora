@@ -2,7 +2,6 @@ import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/action_log/log_history.dart';
-import 'package:carbon_fora/views/profile/profile_tab/wallet/widgets/filter_chips.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
 import 'package:super_tooltip/super_tooltip.dart';
@@ -120,12 +119,12 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                   ),
                                   SuperTooltip(
                                     showBarrier: true,
-                                    showDropBoxFilter: true,
+                                    barrierColor: Colors.black.withOpacity(0.6),
                                     sigmaX: 10,
                                     sigmaY: 10,
                                     content: FilledBox(
                                       height: 150,
-                                      width: size.width / 100 * 80,
+                                      width: size.width / 100 * 70,
                                       padding: EdgeInsets.all(10),
                                       borderRadius: BorderRadius.circular(10),
                                       color: themewhitecolor,
@@ -251,7 +250,8 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                       index == 0
                                           ? SuperTooltip(
                                               showBarrier: true,
-                                              showDropBoxFilter: true,
+                                              barrierColor: Colors.black
+                                                  .withOpacity(0.6),
                                               sigmaX: 10,
                                               sigmaY: 10,
                                               content: FilledBox(
@@ -302,12 +302,13 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                             )
                                           : SuperTooltip(
                                               showBarrier: true,
-                                              showDropBoxFilter: true,
+                                              barrierColor: Colors.black
+                                                  .withOpacity(0.6),
                                               sigmaX: 10,
                                               sigmaY: 10,
                                               content: FilledBox(
                                                 height: 150,
-                                                width: size.width / 100 * 80,
+                                                width: size.width / 100 * 70,
                                                 padding: EdgeInsets.all(10),
                                                 borderRadius:
                                                     BorderRadius.circular(10),

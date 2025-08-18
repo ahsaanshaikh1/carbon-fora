@@ -1,5 +1,6 @@
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class BadgesScreen extends StatefulWidget {
@@ -112,34 +113,41 @@ class _BadgesScreenState extends State<BadgesScreen> {
                 20.kH,
 
                 // GridView placed correctly
-                GridView.count(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
+                GridView.builder(
+                  itemCount: 4,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  children: const [
-                    BadgeCard(
-                      icon: Icons.eco_outlined,
-                      title: 'Eco Rookie',
-                      description: 'Logged your first eco-action',
-                    ),
-                    BadgeCard(
-                      icon: Icons.directions_bike,
-                      title: 'First Ride',
-                      description: 'Tracked your first cycling trip',
-                    ),
-                    BadgeCard(
-                      icon: Icons.bolt,
-                      title: 'Energy Saver',
-                      description: 'Saved electricity 10 times',
-                    ),
-                    BadgeCard(
-                      icon: Icons.local_fire_department,
-                      title: 'Green Streak',
-                      description: 'Logged actions 7 days in a row',
-                    ),
-                  ],
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 12,
+                    mainAxisExtent: 220,
+                  ),
+                  itemBuilder: (context, index) {
+                    return BadgeCard(
+                      icon: index == 0
+                          ? "assets/images/png/eco.png"
+                          : index == 1
+                          ? "assets/images/png/ride.png"
+                          : index == 2
+                          ? "assets/images/png/energy.png"
+                          : "assets/images/png/streak.png",
+                      title: index == 0
+                          ? 'Eco Rookie'
+                          : index == 1
+                          ? "First Ride"
+                          : index == 2
+                          ? "Energy Saver"
+                          : "Green Streak",
+                      description: index == 0
+                          ? 'Logged your first eco-action'
+                          : index == 1
+                          ? "Tracked your first cycling trip"
+                          : index == 2
+                          ? "Saved electricity 10 times"
+                          : "Logged actions 7 days in a row",
+                    );
+                  },
                 ),
               ],
             ),
@@ -151,7 +159,7 @@ class _BadgesScreenState extends State<BadgesScreen> {
 }
 
 class BadgeCard extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final String description;
 
@@ -170,9 +178,9 @@ class BadgeCard extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 48, color: Colors.white),
+          Image.asset(icon, height: 50),
           SizedBox(height: 10),
           Text(
             title,
@@ -183,7 +191,7 @@ class BadgeCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 4),
+          4.kH,
           Text(
             description,
             style: TextStyle(
@@ -193,21 +201,19 @@ class BadgeCard extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 15),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.blue.shade800,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              'View Details',
-              style: TextStyle(
-                color: themebluecolor,
-                fontWeight: FontWeight.bold,
+          15.kH,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: CustomButton(
+              onTap: () {},
+              height: 40,
+              buttoncolor: themewhitecolor,
+              child: Text(
+                'View Details',
+                style: TextStyle(
+                  color: themebluecolor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

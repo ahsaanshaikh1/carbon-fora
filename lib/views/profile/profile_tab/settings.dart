@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
   @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  bool select = false;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Container(
         constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height,
@@ -54,37 +59,14 @@ class SettingScreen extends StatelessWidget {
                         ],
                       ),
                       Switch(
-                        value: true,
-                        onChanged: (bool value) {},
+                        value: select,
+                        onChanged: (bool value) {
+                          setState(() {
+                            select = value;
+                          });
+                        },
                         activeColor: Colors.white,
                         inactiveTrackColor: Colors.white24,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 10,
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 24,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white30),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.edit, color: Colors.white),
-                      SizedBox(width: 10),
-                      Text(
-                        "Edit Profile",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ],
                   ),
@@ -130,7 +112,7 @@ class SettingScreen extends StatelessWidget {
             ),
             const Center(
               child: Text(
-                "My Settings",
+                "Settings",
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
