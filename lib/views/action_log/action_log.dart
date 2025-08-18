@@ -193,7 +193,7 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 );
               }
             } else if (_currentStep == 1) {
-              if (image == null) {
+              if (image != null) {
                 showSnackBar(context, "Please take picture first");
               } else {
                 _controller.animateToPage(
@@ -205,7 +205,9 @@ class _LogActionScreenState extends State<LogActionScreen> {
             } else if (_currentStep == 2) {
               if (selectedOption == 1 ||
                   selectedOption == 4 ||
-                  selectedOption == 5) {
+                  selectedOption == 5 ||
+                  selectedOption == 6 ||
+                  selectedOption == 7) {
                 Go.route(context, ActionSubmitted());
               } else {
                 Go.route(context, EndAction(selectedOption: selectedOption!));

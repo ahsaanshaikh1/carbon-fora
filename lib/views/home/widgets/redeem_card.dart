@@ -70,7 +70,7 @@ final List<Map<String, String>> redeemData = [
     "icon": "assets/images/png/gift.png",
   },
   {
-    "title": "Skincar Gifts",
+    "title": "Skincare Gifts",
     "subtitle": "30 Credits",
     "icon": "assets/images/png/lipstick.png",
   },

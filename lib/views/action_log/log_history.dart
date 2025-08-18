@@ -12,6 +12,10 @@ class LogHistory extends StatefulWidget {
 }
 
 class _LogHistoryState extends State<LogHistory> {
+  int isSelected = 0;
+  String? selectDays = 'All';
+  List<String> daysList = ["All", "Weekly"];
+
   final List<LogItem> logs = [
     LogItem("Bike", "+1.2 Carbon Credits", "Pending", "Today, 9:30 AM"),
     LogItem("Recycle", "+0.6 Carbon Credits", "Verified", "Today, 9:30 AM"),
@@ -93,20 +97,53 @@ class _LogHistoryState extends State<LogHistory> {
                         color: Colors.white,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white24,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        children: [
-                          Text("All", style: TextStyle(color: Colors.white)),
-                          Icon(Icons.arrow_drop_down, color: Colors.white),
-                        ],
+                    SizedBox(
+                      height: 40,
+                      width: 85,
+                      child: DropdownButtonFormField(
+                        iconDisabledColor: themewhitecolor,
+                        iconEnabledColor: themewhitecolor,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Colors.white, // White border
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Colors.white, // White border on focus
+                              width: 1.5,
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.white),
+                          ),
+                          contentPadding: const EdgeInsets.all(8),
+                        ),
+                        value: selectDays,
+                        dropdownColor: Palette.primaryColor,
+                        menuMaxHeight: 200,
+                        isDense: true,
+                        items: daysList
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: themewhitecolor,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (item) => setState(() => daysList != item),
                       ),
                     ),
                   ],
@@ -118,7 +155,10 @@ class _LogHistoryState extends State<LogHistory> {
                   primary: false,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
-                    return LogCard(log: logs[index]);
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: LogCard(log: logs[index]),
+                    );
                   },
                 ),
               ],

@@ -15,6 +15,10 @@ class LeaderboardScreen extends StatefulWidget {
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   int select = 0;
+  int isSelected = 0;
+  String? selectDays = 'Global';
+  List<String> daysList = ["Global", "Weekly"];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -139,29 +143,57 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white10,
-                                borderRadius: BorderRadius.circular(11),
-                                border: Border.all(color: Colors.white30),
-                              ),
-                              child: Row(
-                                children: const [
-                                  Text(
-                                    'Global',
-                                    style: TextStyle(color: Colors.white),
+                            SizedBox(
+                              height: 40,
+                              width: 85,
+                              child: DropdownButtonFormField(
+                                iconDisabledColor: themewhitecolor,
+                                iconEnabledColor: themewhitecolor,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white, // White border
+                                    ),
                                   ),
-                                  SizedBox(width: 4),
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.white,
-                                    size: 18,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color:
+                                          Colors.white, // White border on focus
+                                      width: 1.5,
+                                    ),
                                   ),
-                                ],
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.all(8),
+                                ),
+                                value: selectDays,
+                                dropdownColor: Palette.primaryColor,
+                                menuMaxHeight: 200,
+                                isDense: true,
+                                items: daysList
+                                    .map(
+                                      (item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: themewhitecolor,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (item) =>
+                                    setState(() => daysList != item),
                               ),
                             ),
                           ],
@@ -190,12 +222,12 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                     "Credits Earned",
                                     style: TextStyle(color: Colors.white),
                                   ),
-                                  SizedBox(width: 4),
-                                  Icon(
-                                    Icons.info_outline,
-                                    size: 16,
-                                    color: Colors.white70,
-                                  ),
+                                  // SizedBox(width: 4),
+                                  // Icon(
+                                  //   Icons.info_outline,
+                                  //   size: 16,
+                                  //   color: Colors.white70,
+                                  // ),
                                 ],
                               ),
                               Text(
