@@ -82,10 +82,8 @@ class _EndActionState extends State<EndAction> {
 
   @override
   void dispose() {
-    // Cancel subscription to avoid memory leaks
-    if (mounted) {
-      positionStream?.cancel();
-    }
+    positionStream?.cancel();
+
     super.dispose();
   }
 
