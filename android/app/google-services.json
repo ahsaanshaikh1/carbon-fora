@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:659290111643:android:5c434c667a2b9ea682903e",
+        "android_client_info": {
+          "package_name": "com.carbonfora.carbon_fora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659290111643-pv751a4o6e3bsnj0vmgv4vit78h1l86s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEbOYQsmpXp02i6utllHxyaM0GsI0i4Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659290111643-pv751a4o6e3bsnj0vmgv4vit78h1l86s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "659290111643-e82dv1laorntc3tu516kq3jnot77f9n1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.carbonFora"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:659290111643:android:362910a188d3885982903e",
         "android_client_info": {
           "package_name": "com.example.carbon_fora"

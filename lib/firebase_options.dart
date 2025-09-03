@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDEbOYQsmpXp02i6utllHxyaM0GsI0i4Lc',
-    appId: '1:659290111643:android:362910a188d3885982903e',
+    appId: '1:659290111643:android:5c434c667a2b9ea682903e',
     messagingSenderId: '659290111643',
     projectId: 'carbon-fora-a86fe',
     storageBucket: 'carbon-fora-a86fe.firebasestorage.app',
@@ -63,7 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '659290111643',
     projectId: 'carbon-fora-a86fe',
     storageBucket: 'carbon-fora-a86fe.firebasestorage.app',
+    androidClientId: '659290111643-p691psqd1hfserlb3gl8ffkucnahqtua.apps.googleusercontent.com',
     iosClientId: '659290111643-e82dv1laorntc3tu516kq3jnot77f9n1.apps.googleusercontent.com',
     iosBundleId: 'com.example.carbonFora',
   );
+
 }
