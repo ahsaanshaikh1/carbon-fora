@@ -1,7 +1,8 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/views/carbon_academy_modules.dart';
 import 'package:carbon_fora/views/profile/profile_tab/badges_gamification.dart';
 import 'package:carbon_fora/views/profile/profile_tab/carbon_academy.dart';
 import 'package:carbon_fora/views/profile/profile_tab/change_password_screen.dart';
@@ -45,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     MenuItem(
       'Carbon Academy',
       "assets/images/png/carbon-academy.png",
-      CarbonAcademy(),
+      CarbonAcademyModules(),
     ),
     MenuItem(
       'Badges & Gamification',
@@ -53,11 +54,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       BadgesScreen(),
     ),
     MenuItem('Settings', "assets/images/png/setting.png", SettingScreen()),
-    MenuItem(
-      'Notification',
-      "assets/images/png/notifications.png",
-      NotificationScreen(),
-    ),
+    // MenuItem(
+    //   'Notification',
+    //   "assets/images/png/notifications.png",
+    //   NotificationScreen(),
+    // ),
     MenuItem(
       'Privacy Policy',
       "assets/images/png/privacy-policy.png",
@@ -74,6 +75,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
       HelpSupport(),
     ),
   ];
+  String formatNumber(double number) {
+    if (number >= 1000000000) {
+      return (number / 1000000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "B";
+    } else if (number >= 1000000) {
+      return (number / 1000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "M";
+    } else if (number >= 1000) {
+      return (number / 1000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "k";
+    } else {
+      return number
+          .toStringAsFixed(4)
+          .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,20 +147,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          Positioned(
-                            child: InkWell(
-                              onTap: () {},
-                              child: CircleAvatar(
-                                radius: 12,
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   child: InkWell(
+                          //     onTap: () {},
+                          //     child: CircleAvatar(
+                          //       radius: 12,
+                          //       backgroundColor: Colors.white,
+                          //       child: Icon(
+                          //         Icons.edit,
+                          //         size: 14,
+                          //         color: Colors.black,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 10),
@@ -155,9 +178,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        '45.2 kg CO₂e Saved',
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                      Consumer<AuthPro>(
+                        builder: (context, pro, child) {
+                          return Text(
+                            '${Provider.of<AuthPro>(context, listen: false).model != null ? formatNumber(Provider.of<AuthPro>(context, listen: false).model!.totalCo2Saved * 1000) + " kg\nCO2e" : "0" + " kg\nCO2e"} Saved',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   );
@@ -262,12 +292,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: ListTile(
         onTap: () {
-          if (item.title == "Change Password" &&
+          if (item.title == "Badges & Gamification") {
+            showTopAlertInfo(
+              context: context,
+              text: "This will be available in future update.",
+            );
+          } else if (item.title == "Change Password" &&
               !Provider.of<AuthPro>(
                 context,
                 listen: false,
               ).profile!.provider.contains("EMAIL")) {
-            showSnackBar(context, "You are logged in using social account");
+                //info@carbonfora.com
+            showTopAlertInfo(
+              context: context,
+              text: "You are logged in using social account",
+            );
           } else {
             Navigator.push(
               context,

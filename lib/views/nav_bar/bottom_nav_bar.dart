@@ -1,3 +1,8 @@
+import 'package:carbon_fora/provider/action_log/action_log_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
+import 'package:carbon_fora/provider/common/common_pro.dart';
+import 'package:carbon_fora/provider/voucher/voucher_pro.dart';
+import 'package:carbon_fora/services/notification%20services/notification_services.dart';
 import 'package:carbon_fora/views/home/home_screen.dart';
 import 'package:carbon_fora/views/profile/profile.dart';
 import 'package:carbon_fora/views/profile/profile_tab/leaderboard_screen.dart';
@@ -6,6 +11,7 @@ import 'package:carbon_fora/views/redeem/impact_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class BottomNavBar extends StatefulWidget {
@@ -23,8 +29,22 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   void initState() {
     super.initState();
+    NotificationServices notificationServices = NotificationServices();
+    WidgetsBinding.instance.addPostFrameCallback((v) async {
+      Provider.of<AuthPro>(context, listen: false).getHome();
+      Provider.of<CommonPro>(context, listen: false).getCategories();
+      Provider.of<VoucherPro>(context, listen: false).getHistory();
+      Provider.of<AuthPro>(
+        context,
+        listen: false,
+      ).fcmToken(fcmToken: await notificationServices.getDeviceToken());
+    });
     select = int.parse(widget.currentIndex);
     pageController = PageController(initialPage: select);
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
   }
 
   @override
@@ -115,6 +135,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                   radius: 30,
                                   backgroundColor: themewhitecolor,
                                   child: Image.asset(
+                                    height: 45,
                                     "assets/images/png/nav-icon-3.png",
                                   ),
                                 )
@@ -133,6 +154,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                                             ? "assets/images/png/nav-icon-4.png"
                                             : "assets/images/png/nav-icon-5.png",
                                         height: 25,
+                                        fit: BoxFit.cover,
                                         color: themewhitecolor,
                                       ),
                                     ],

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

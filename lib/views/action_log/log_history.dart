@@ -1,7 +1,12 @@
+import 'package:carbon_fora/model/action_log_m.dart';
+import 'package:carbon_fora/provider/action_log/action_log_pro.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class LogHistory extends StatefulWidget {
@@ -12,30 +17,30 @@ class LogHistory extends StatefulWidget {
 }
 
 class _LogHistoryState extends State<LogHistory> {
-  int isSelected = 0;
-  String? selectDays = 'All';
-  List<String> daysList = ["All", "Weekly"];
+  // String? selectDays = 'PENDING';
+  List<String> daysList = ["Pending", "Rejected", "Verified", "All"];
 
-  final List<LogItem> logs = [
-    LogItem("Bike", "+1.2 Carbon Credits", "Pending", "Today, 9:30 AM"),
-    LogItem("Recycle", "+0.6 Carbon Credits", "Verified", "Today, 9:30 AM"),
-    LogItem(
-      "Recycle",
-      "+0.6 Carbon Credits",
-      "Rejected",
-      "Today, 9:30 AM",
-      Icons.info_outline,
-    ),
-    LogItem("Bike", "+1.2 Carbon Credits", "Pending", "Today, 9:30 AM"),
-    LogItem("Recycle", "+0.6 Carbon Credits", "Verified", "Today, 9:30 AM"),
-    LogItem(
-      "Recycle",
-      "+0.6 Carbon Credits",
-      "Rejected",
-      "Today, 9:30 AM",
-      Icons.info_outline,
-    ),
-  ];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((v) {
+      Provider.of<ActionLogPro>(
+        context,
+        listen: false,
+      ).getLogs(context: context, fresh: true);
+    });
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        Provider.of<ActionLogPro>(
+          context,
+          listen: false,
+        ).getLogs(context: context, fresh: false);
+      }
+    });
+    super.initState();
+  }
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +104,17 @@ class _LogHistoryState extends State<LogHistory> {
                     ),
                     SizedBox(
                       height: 40,
-                      width: 85,
+                      width: 90,
                       child: DropdownButtonFormField(
+                        hint: Text(
+                          "All",
+                          maxLines: 1,
+
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: themewhitecolor,
+                          ),
+                        ),
                         iconDisabledColor: themewhitecolor,
                         iconEnabledColor: themewhitecolor,
                         decoration: InputDecoration(
@@ -123,7 +137,10 @@ class _LogHistoryState extends State<LogHistory> {
                           ),
                           contentPadding: const EdgeInsets.all(8),
                         ),
-                        value: selectDays,
+                        value: Provider.of<ActionLogPro>(
+                          context,
+                          listen: false,
+                        ).status,
                         dropdownColor: Palette.primaryColor,
                         menuMaxHeight: 200,
                         isDense: true,
@@ -143,21 +160,53 @@ class _LogHistoryState extends State<LogHistory> {
                               ),
                             )
                             .toList(),
-                        onChanged: (item) => setState(() => daysList != item),
+                        onChanged: (item) {
+                          Provider.of<ActionLogPro>(
+                            context,
+                            listen: false,
+                          ).status = item!;
+                          Provider.of<ActionLogPro>(
+                            context,
+                            listen: false,
+                          ).getLogs(context: context, fresh: true);
+                        },
                       ),
                     ),
                   ],
                 ),
                 20.kH,
-                ListView.builder(
-                  itemCount: 6,
-                  shrinkWrap: true,
-                  primary: false,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: LogCard(log: logs[index]),
+                Consumer<ActionLogPro>(
+                  builder: (context, pro, child) {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                              itemCount: pro.logs.length,
+                              shrinkWrap: true,
+                              primary: false,
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 8),
+                                  child: LogCard(log: pro.logs[index]),
+                                );
+                              },
+                            ),
+                            pro.isLoading
+                                ? Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: themewhitecolor,
+                                      ),
+                                    ),
+                                  )
+                                : 0.kH,
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -175,34 +224,24 @@ class LogItem {
   final String credits;
   final String status;
   final String time;
+  final String reason;
   final IconData? icon;
 
-  LogItem(this.title, this.credits, this.status, this.time, [this.icon]);
+  LogItem(
+    this.title,
+    this.credits,
+    this.status,
+    this.time,
+    this.reason, [
+    this.icon,
+  ]);
 }
 
 class LogCard extends StatelessWidget {
-  final LogItem log;
+  final ActionLog log;
 
   LogCard({required this.log});
   final _controller = SuperTooltipController();
-
-  Color getStatusColor(String status) {
-    switch (status) {
-      case "Pending":
-        return Colors.transparent;
-      case "Verified":
-        return Colors.transparent;
-      case "Rejected":
-        return Colors.transparent;
-      default:
-        return Colors.transparent;
-    }
-  }
-
-  IconData getIcon(String title) {
-    if (title == "Bike") return Icons.pedal_bike;
-    return Icons.recycling;
-  }
 
   void showReasonDialog() {
     SuperTooltip(
@@ -246,70 +285,93 @@ class LogCard extends StatelessWidget {
         color: Colors.white.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(width: 1, color: themewhitecolor),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: Colors.white.withOpacity(0.15),
-              child: Icon(getIcon(log.title), color: Colors.white),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    log.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: Colors.white.withOpacity(0.15),
+                  child: Icon(Icons.eco, color: Colors.white),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        log.credits,
+                        log.actionType.replaceAll("_", " "),
                         style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (log.icon != null) ...[
-                        const SizedBox(width: 6),
-                        Icon(log.icon, size: 16, color: Colors.white54),
-                      ],
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "+${log.carbonCreditsEarned.toStringAsFixed(6)}",
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          // Icon(Icons.info_outline, size: 16, color: Colors.white54),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: getStatusColor(log.status).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(width: 1, color: themewhitecolor),
-                  ),
-                  child: Text(
-                    log.status,
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
-                  ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  log.time,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(width: 1, color: themewhitecolor),
+                      ),
+                      child: Text(
+                        log.verificationStatus,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      DateFormat(
+                        "d MMM, y",
+                      ).format(DateTime.parse(log.timestamp.toString())),
+
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+            log.verificationStatus == "REJECTED" ? 5.kH : 0.kW,
+            log.verificationStatus == "REJECTED"
+                ? Text(
+                    log.reason,
+                    style: TextStyle(fontSize: 12, color: Colors.white70),
+                  )
+                : 0.kW,
           ],
         ),
       ),

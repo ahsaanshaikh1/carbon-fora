@@ -1,4 +1,4 @@
-package com.example.carbon_fora
+package com.carbonfora.carbon_fora
 
 import io.flutter.embedding.android.FlutterActivity
 

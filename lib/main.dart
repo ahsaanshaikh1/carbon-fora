@@ -1,4 +1,11 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/action_log/action_log_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
+import 'package:carbon_fora/provider/carbon_academy/carbon_academy_pro.dart';
+import 'package:carbon_fora/provider/common/common_pro.dart';
+import 'package:carbon_fora/provider/contact/contact_pro.dart';
+import 'package:carbon_fora/provider/leaderboard/leaderboard_pro.dart';
+import 'package:carbon_fora/provider/voucher/voucher_pro.dart';
+import 'package:carbon_fora/provider/wallet/wallet.dart';
 import 'package:carbon_fora/route_structure/go_router.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/utils/constants.dart';
@@ -18,7 +25,18 @@ void main() async {
   showOnBoard = SharedPrefHelper.getBool("showOnBoard");
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider<AuthPro>(create: (_) => AuthPro())],
+      providers: [
+        ChangeNotifierProvider<AuthPro>(create: (_) => AuthPro()),
+        ChangeNotifierProvider<ActionLogPro>(create: (_) => ActionLogPro()),
+        ChangeNotifierProvider<ContactPro>(create: (_) => ContactPro()),
+        ChangeNotifierProvider<WalletPro>(create: (_) => WalletPro()),
+        ChangeNotifierProvider<VoucherPro>(create: (_) => VoucherPro()),
+        ChangeNotifierProvider<CommonPro>(create: (_) => CommonPro()),
+        ChangeNotifierProvider<LeaderboardPro>(create: (_) => LeaderboardPro()),
+        ChangeNotifierProvider<CarbonAcademyPro>(
+          create: (_) => CarbonAcademyPro(),
+        ),
+      ],
       child: MyApp(),
     ),
   );

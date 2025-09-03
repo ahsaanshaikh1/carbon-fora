@@ -1,8 +1,17 @@
+import 'package:carbon_fora/model/product_model.dart';
+import 'package:carbon_fora/model/voucher_model.dart';
+import 'package:carbon_fora/provider/common/common_pro.dart';
+import 'package:carbon_fora/provider/voucher/voucher_pro.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/views/product/prod_detail.dart';
 import 'package:carbon_fora/views/redeem/voucher_detail.dart';
+import 'package:carbon_fora/widgets/empty_widget.dart';
+import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ImpactExchange extends StatefulWidget {
   final bool isBackButtonVisible;
@@ -14,10 +23,41 @@ class ImpactExchange extends StatefulWidget {
 
 class _ImpactExchangeState extends State<ImpactExchange> {
   String selectedChip = "All"; // Default selected chip
+  int select = 0;
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        select == 0
+            ? Provider.of<VoucherPro>(context, listen: false).getVoucher(
+                fresh: false,
+                context: context,
+                categId: category == null ? "" : category!,
+              )
+            : Provider.of<VoucherPro>(context, listen: false).getProducts(
+                fresh: false,
+                context: context,
+                categId: category == null ? "" : category!,
+              );
+      }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      Provider.of<VoucherPro>(
+        context,
+        listen: false,
+      ).getVoucher(context: context, categId: "", fresh: true);
+    });
+    super.initState();
+  }
+
+  final chips = ["All", "Fashion", "Personal Care", "Travel"];
+  String? category;
 
   @override
   Widget build(BuildContext context) {
-    final chips = ["All", "Fashion", "Personal Care", "Travel"];
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -63,7 +103,7 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                             : SizedBox(),
                       ],
                     ),
-                    const Center(
+                    Center(
                       child: Text(
                         "Impact & Exchange",
                         style: TextStyle(
@@ -79,51 +119,237 @@ class _ImpactExchangeState extends State<ImpactExchange> {
               20.kH,
               Expanded(
                 child: SingleChildScrollView(
+                  controller: scrollController,
                   child: Column(
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 40,
+                            width: 185,
+                            child: DropdownButtonFormField(
+                              hint: Text(
+                                "Select Category",
+                                style: TextStyle(
+                                  color: themewhitecolor.withOpacity(.8),
+                                ),
+                              ),
+                              iconDisabledColor: themewhitecolor,
+                              iconEnabledColor: themewhitecolor,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white, // White border
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color:
+                                        Colors.white, // White border on focus
+                                    width: 1.5,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.all(8),
+                              ),
+                              value: category,
+                              dropdownColor: Palette.themecolor,
+                              menuMaxHeight: 200,
+                              isDense: true,
+                              items:
+                                  Provider.of<CommonPro>(context, listen: false)
+                                      .categories
+                                      .map(
+                                        (item) => DropdownMenuItem(
+                                          value: item.id,
+                                          child: SizedBox(
+                                            width: 142,
+                                            child: Text(
+                                              item.name,
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                                color: themewhitecolor,
+                                              ),
+                                              maxLines: 1,
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                              onChanged: (item) {
+                                category = item;
+                                if (select == 0) {
+                                  Provider.of<VoucherPro>(
+                                    context,
+                                    listen: false,
+                                  ).getVoucher(
+                                    fresh: true,
+                                    context: context,
+                                    categId: category == null ? "" : category!,
+                                  );
+                                } else {
+                                  Provider.of<VoucherPro>(
+                                    context,
+                                    listen: false,
+                                  ).getProducts(
+                                    fresh: true,
+                                    context: context,
+                                    categId: category == null ? "" : category!,
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                          15.kW,
+                        ],
+                      ),
+
+                      20.kH,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: FilledBox(
+                          padding: EdgeInsets.all(10),
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(11),
+
                           child: Row(
-                            children: chips
-                                .map(
-                                  (chip) => Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: _buildChip(
-                                      chip,
-                                      isSelected: selectedChip == chip,
-                                      onTap: () {
-                                        setState(() {
-                                          selectedChip =
-                                              chip; // Update selected chip
-                                        });
-                                      },
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: List.generate(
+                              2,
+                              (index) => Expanded(
+                                child: FilledBox(
+                                  onTap: () {
+                                    setState(() {
+                                      select = index;
+                                    });
+                                    if (select == 0) {
+                                      Provider.of<VoucherPro>(
+                                        context,
+                                        listen: false,
+                                      ).getVoucher(
+                                        fresh: true,
+
+                                        context: context,
+                                        categId: category == null
+                                            ? ""
+                                            : category!,
+                                      );
+                                    } else {
+                                      Provider.of<VoucherPro>(
+                                        context,
+                                        listen: false,
+                                      ).getProducts(
+                                        fresh: true,
+                                        context: context,
+                                        categId: category == null
+                                            ? ""
+                                            : category!,
+                                      );
+                                    }
+                                  },
+                                  padding: const EdgeInsets.all(10),
+                                  color: select == index
+                                      ? Colors.white
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(11),
+                                  child: Center(
+                                    child: Text(
+                                      index == 0 ? "Vouchers" : "Products",
+                                      style: TextStyle(
+                                        color: select == index
+                                            ? Color(0xFF0F6C9C)
+                                            : Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: mediumfontsize3,
+                                      ),
                                     ),
                                   ),
-                                )
-                                .toList(),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
+
                       20.kH,
-                      // GridView placed correctly
-                      GridView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          mainAxisExtent: 290,
-                        ),
-                        itemCount: 4,
-                        itemBuilder: (context, index) {
-                          return const BadgeCard(
-                            image: "assets/images/png/travel.png",
-                            title: "Travel Voucher",
-                            description: 'Worth up to \$5\n50 Credits',
+                      Consumer<VoucherPro>(
+                        builder: (context, pro, child) {
+                          return Column(
+                            children: [
+                              select == 0
+                                  ? GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                      ),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12,
+                                            mainAxisSpacing: 12,
+                                            mainAxisExtent: 250,
+                                          ),
+                                      itemCount: pro.vouchers.length,
+                                      itemBuilder: (context, index) {
+                                        return BadgeCard(
+                                          voucher: pro.vouchers[index],
+                                        );
+                                      },
+                                    )
+                                  : GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                      ),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12,
+                                            mainAxisSpacing: 12,
+                                            mainAxisExtent: 250,
+                                          ),
+                                      itemCount: pro.products.length,
+                                      itemBuilder: (context, index) {
+                                        return ProductCard(
+                                          product: pro.products[index],
+                                        );
+                                      },
+                                    ),
+
+                              pro.isLoading
+                                  ? Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                        10,
+                                        70,
+                                        10,
+                                        10,
+                                      ),
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          color: themewhitecolor,
+                                        ),
+                                      ),
+                                    )
+                                  : (pro.vouchers.isEmpty && select == 0) ||
+                                        (pro.products.isEmpty && select == 1)
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 70),
+                                      child: emptyWidget(),
+                                    )
+                                  : 0.kH,
+                            ],
                           );
                         },
                       ),
@@ -167,15 +393,8 @@ class _ImpactExchangeState extends State<ImpactExchange> {
 }
 
 class BadgeCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String description;
-
-  const BadgeCard({
-    required this.image,
-    required this.title,
-    required this.description,
-  });
+  final VoucherModel voucher;
+  const BadgeCard({required this.voucher});
 
   @override
   Widget build(BuildContext context) {
@@ -191,29 +410,33 @@ class BadgeCard extends StatelessWidget {
           CircleAvatar(
             radius: 40,
             backgroundColor: themewhitecolor,
-            backgroundImage: AssetImage(image),
+            backgroundImage: NetworkImage(voucher.brand.companyLogo),
           ),
           10.kH,
           Text(
-            title,
+            voucher.name,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
+            maxLines: 1,
           ),
           4.kH,
-          Text(
-            description,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              voucher.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           10.kH,
           ElevatedButton(
@@ -226,7 +449,7 @@ class BadgeCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30),
             ),
             onPressed: () {
-              Go.route(context, VoucherDetail());
+              Go.route(context, VoucherDetail(model: voucher));
             },
             child: Text(
               'Redeem Now',
@@ -249,6 +472,80 @@ class BadgeCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final ProductModel product;
+  const ProductCard({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Go.route(context, ProductDetail(model: product));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.white70),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: themewhitecolor,
+                border: Border.all(width: 1, color: themewhitecolor),
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(11),
+                child: Image.network(
+                  product.brand.companyLogo,
+                  width: double.infinity, // full screen width
+                  height: 130, // fixed height jaisa chahiye (adjust karen)
+                  fit: BoxFit
+                      .fitWidth, // width fit karega, height maintain rahegi
+                ),
+              ),
+            ),
+            20.kH,
+            Text(
+              product.name,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+            ),
+            4.kH,
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "PKR ${product.retailPrice}",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

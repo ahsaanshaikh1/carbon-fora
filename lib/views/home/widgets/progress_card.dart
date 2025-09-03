@@ -9,7 +9,7 @@ class ProgressCard extends StatelessWidget {
   final String iconPath;
   // final int streakCount;
   // final int totalDays;
-  final int completedDays;
+  final List completedDays;
 
   const ProgressCard({
     super.key,
@@ -24,7 +24,7 @@ class ProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 85,
+      height: 95,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: themewhitecolor.withAlpha(20),
@@ -45,6 +45,7 @@ class ProgressCard extends StatelessWidget {
           15.kW,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               10.kW,
               Text(
@@ -64,13 +65,13 @@ class ProgressCard extends StatelessWidget {
               ),
               5.kH,
               Row(
-                children: List.generate(5, (index) {
+                children: List.generate(7, (index) {
                   return Container(
                     margin: const EdgeInsets.only(right: 6),
-                    width: 40,
+                    width: 35,
                     height: 6,
                     decoration: BoxDecoration(
-                      color: index < completedDays
+                      color: index == completedDays[index]
                           ? themewhitecolor
                           : themewhitecolor.withAlpha(100),
                       borderRadius: BorderRadius.circular(20),

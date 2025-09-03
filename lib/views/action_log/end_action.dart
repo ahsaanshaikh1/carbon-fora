@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:awesome_top_snackbar/awesome_top_snackbar.dart';
+import 'package:carbon_fora/provider/action_log/action_log_pro.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/utils/dailog.dart';
 import 'package:carbon_fora/views/action_log/action_submitted.dart';
 import 'package:carbon_fora/widgets/custom_button.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
@@ -14,11 +17,19 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class EndAction extends StatefulWidget {
   final int selectedOption;
+  final File photo;
+  final String description;
 
-  const EndAction({super.key, required this.selectedOption});
+  EndAction({
+    super.key,
+    required this.selectedOption,
+    required this.photo,
+    required this.description,
+  });
 
   @override
   State<EndAction> createState() => _EndActionState();
@@ -37,6 +48,31 @@ class _EndActionState extends State<EndAction> {
       desiredAccuracy: LocationAccuracy.high,
     );
     startLocation = LatLng(position.latitude, position.longitude);
+  }
+
+  Timer? _timer1;
+  void checkSpeed(double speed) {
+    if (speed > maxThreshold!) {
+      setState(() {
+        showThreshMsg = true;
+      });
+
+      if (_timer1 == null || !_timer1!.isActive) {
+        final secs = 15;
+        _timer1 = Timer(Duration(seconds: secs), () {
+          _timer1!.cancel();
+          Go.pop(context);
+          Go.pop(context);
+          showTopAlertError(text: "Action log cancelled", context: context);
+        });
+      }
+    } else {
+      log("cancel");
+      setState(() {
+        showThreshMsg = false;
+      });
+      _timer1?.cancel();
+    }
   }
 
   @override
@@ -59,15 +95,7 @@ class _EndActionState extends State<EndAction> {
           print(startLocation?.latitude);
           print(startLocation?.longitude);
           log(position.speed.toString());
-          if (maxThreshold != null && position.speed > maxThreshold!) {
-            setState(() {
-              showThreshMsg = true;
-            });
-          } else if (maxThreshold != null) {
-            setState(() {
-              showThreshMsg = false;
-            });
-          }
+          checkSpeed(position.speed);
         });
 
     _elapsed = DateTime.now().difference(startTime);
@@ -83,7 +111,7 @@ class _EndActionState extends State<EndAction> {
   @override
   void dispose() {
     positionStream?.cancel();
-
+    _timer1?.cancel();
     super.dispose();
   }
 
@@ -112,8 +140,72 @@ class _EndActionState extends State<EndAction> {
         child: Column(
           children: [
             CustomButton(
-              onTap: () {
-                Go.route(context, ActionSubmitted());
+              onTap: () async {
+                try {
+                  _timer.cancel();
+
+                  CustomDailog.loadingDailog(context);
+                  Position position = await Geolocator.getCurrentPosition(
+                    desiredAccuracy: LocationAccuracy.high,
+                  );
+                  double distanceInMeters = Geolocator.distanceBetween(
+                    startLocation!.latitude,
+                    startLocation!.longitude,
+                    position.latitude,
+                    position.longitude,
+                  );
+                  if (widget.selectedOption == 0) {
+                    Go.pop(context);
+                    Provider.of<ActionLogPro>(
+                      context,
+                      listen: false,
+                    ).logCyclingAction(
+                      description: widget.description,
+                      context: context,
+                      image: widget.photo,
+                      points: LatLng(
+                        startLocation!.latitude,
+                        startLocation!.longitude,
+                      ),
+                      distance: distanceInMeters * 0.000621371,
+                    );
+                  } else if (widget.selectedOption == 2) {
+                    Go.pop(context);
+                    Provider.of<ActionLogPro>(
+                      context,
+                      listen: false,
+                    ).logWalkingAction(
+                      description: widget.description,
+                      context: context,
+                      image: widget.photo,
+                      points: LatLng(
+                        startLocation!.latitude,
+                        startLocation!.longitude,
+                      ),
+                      distance: distanceInMeters * 0.000621371,
+                    );
+                  } else if (widget.selectedOption == 3) {
+                    Go.pop(context);
+                    Provider.of<ActionLogPro>(
+                      context,
+                      listen: false,
+                    ).logPublicTransportAction(
+                      description: widget.description,
+                      context: context,
+                      image: widget.photo,
+                      points: LatLng(
+                        startLocation!.latitude,
+                        startLocation!.longitude,
+                      ),
+                      distance: distanceInMeters * 0.000621371,
+                    );
+                  }
+                } catch (e) {
+                  Go.pop(context);
+                  Go.pop(context);
+                  Go.pop(context);
+                  showSnackBar(context, "Something went wrong");
+                }
               },
               height: 60,
               buttoncolor: themewhitecolor,
@@ -261,7 +353,7 @@ class _EndActionState extends State<EndAction> {
               !showThreshMsg
                   ? 0.kH
                   : SizedBox(
-                      width: double.infinity,
+                      width: 400,
                       child: DefaultTextStyle(
                         style: const TextStyle(
                           fontSize: 16.0,
@@ -277,7 +369,7 @@ class _EndActionState extends State<EndAction> {
                               ),
                             ],
                             onTap: () {
-                              print("Tap Event");
+                              // print("Tap Event");
                             },
                           ),
                         ),

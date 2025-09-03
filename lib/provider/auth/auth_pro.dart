@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:carbon_fora/helper/function_helper.dart';
 import 'package:carbon_fora/main.dart';
+import 'package:carbon_fora/model/home_model.dart';
 import 'package:carbon_fora/model/user_m.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/route_structure/go_router.dart';
@@ -22,6 +23,8 @@ import 'package:provider/provider.dart';
 class AuthPro with ChangeNotifier {
   final GoogleSignIn googleSignin = GoogleSignIn.instance;
   bool isLoadingProfile = true;
+  bool isLoadingHome = true;
+  HomeModel? model;
   UserModel? profile;
   final firstNameCtrl = TextEditingController();
   final lastNameCtrl = TextEditingController();
@@ -386,6 +389,35 @@ class AuthPro with ChangeNotifier {
     }
   }
 
+  getHome() async {
+    try {
+      isLoadingHome = true;
+      notifyListeners();
+      model = null;
+
+      var data = await getfunction(
+        authorization: true,
+        tokenKey: SharedPrefHelper.utils.authorizedToken,
+        Api.user.home,
+        header: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
+      );
+      if (data['success'] == true) {
+        model = HomeModel.fromJson(data['stats']);
+        isLoadingHome = false;
+        notifyListeners();
+      } else {
+        model = null;
+        isLoadingHome = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      model = null;
+      isLoadingHome = false;
+      notifyListeners();
+      log("Something went wrong");
+    }
+  }
+
   getProfile() async {
     try {
       isLoadingProfile = true;
@@ -504,17 +536,54 @@ class AuthPro with ChangeNotifier {
     }
   }
 
+  fcmToken({required String fcmToken}) async {
+    try {
+      final response = await postFunction(
+        {"fcmToken": fcmToken},
+        Api.user.fcmToken,
+        tokenKey: SharedPrefHelper.utils.authorizedToken,
+        authorization: true,
+        headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
+      );
+      if (response != null && response['success'] == true) {
+        log(response.toString());
+        // showTopAlertSuccess(text: response['message'], context: context);
+        // Go.pop(context);
+        // Go.pop(context);
+      } else {
+        // Go.pop(context);
+        // ErrorHandler.apiException(
+        //   context,
+        //   response['message'] ?? "Something went wrong",
+        // );
+      }
+    } catch (e) {
+      // Go.pop(context);
+      // ErrorHandler.catchException(context, e);
+    }
+  }
+
   logout(BuildContext context) async {
     CustomDailog.loadingDailog(context);
 
     try {
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      await SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
-      await SharedPrefHelper.putBool("isLoggedIn", false);
-      Navigator.of(context, rootNavigator: true).pop(); // Close loader
-
-      GoRouter.of(context).goNamed(RouteName.welcomeScreen);
+      var res = await ApiHandler.postFunction(
+        body: {},
+        api: Api.user.logout,
+        authorization: true,
+        headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
+      );
+      if (res != null && res['success']) {
+        await SharedPrefHelper.remove(SharedPrefHelper.utils.authorizedToken);
+        await SharedPrefHelper.putBool("isLoggedIn", false);
+        Navigator.of(context, rootNavigator: true).pop();
+        GoogleSignIn.instance.signOut();
+        Go.pop(context);
+        GoRouter.of(context).goNamed(RouteName.welcomeScreen);
+      } else {
+        Navigator.pop(context);
+        showTopAlertError(text: res['message'], context: context);
+      }
     } catch (e) {
       Navigator.pop(context);
       showTopAlertError(text: "Logout failed. Try again.", context: context);

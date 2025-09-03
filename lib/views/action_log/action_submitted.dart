@@ -26,6 +26,7 @@ class _ActionSubmittedState extends State<ActionSubmitted> {
           children: [
             CustomButton(
               onTap: () {
+                Go.pop(context);
                 Go.route(context, LogHistory());
               },
               height: 60,

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';

@@ -1,4 +1,4 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/utils/helper/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

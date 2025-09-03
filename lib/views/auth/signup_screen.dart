@@ -1,4 +1,4 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';
 import 'package:carbon_fora/route_structure/go_router.dart';
 import 'package:carbon_fora/theme/colors.dart';

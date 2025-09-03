@@ -1,4 +1,6 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'dart:io';
+
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/utils/helper/validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -297,46 +299,48 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            15.kW,
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/png/star-2.png",
-                                  height: 70,
-                                  width: 70,
-                                  fit: BoxFit.cover,
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  child: SvgPicture.asset(
-                                    "assets/images/svg/apple.svg",
-                                    height: 40,
+                            Platform.isAndroid ? 0.kW : 15.kW,
+                            Platform.isAndroid
+                                ? 0.kW
+                                : Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "assets/images/png/star-2.png",
+                                        height: 70,
+                                        width: 70,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Positioned(
+                                        left: 0,
+                                        right: 0,
+                                        child: SvgPicture.asset(
+                                          "assets/images/svg/apple.svg",
+                                          height: 40,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            15.kW,
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/png/star-2.png",
-                                  height: 70,
-                                  width: 70,
-                                  fit: BoxFit.cover,
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  child: SvgPicture.asset(
-                                    "assets/images/svg/facebook.svg",
-                                    height: 40,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // 15.kW,
+                            // Stack(
+                            //   alignment: Alignment.center,
+                            //   children: [
+                            //     Image.asset(
+                            //       "assets/images/png/star-2.png",
+                            //       height: 70,
+                            //       width: 70,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //     Positioned(
+                            //       left: 0,
+                            //       right: 0,
+                            //       child: SvgPicture.asset(
+                            //         "assets/images/svg/facebook.svg",
+                            //         height: 40,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                         // CustomButton(

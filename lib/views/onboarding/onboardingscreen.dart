@@ -120,31 +120,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   SlideAction(
                     key: _sliderKey,
                     onSubmit: () async {
-                      if (currentIndex == 0) {
-                        _pageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (currentIndex == 1) {
-                        _pageController.animateToPage(
-                          2,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (currentIndex == 2) {
-                        _pageController.animateToPage(
-                          3,
-                          duration: const Duration(milliseconds: 800),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (currentIndex == 3) {
-                        await SharedPrefHelper.putBool("showOnBoard", true);
-                        setState(() {
-                          showOnBoard = true;
-                        });
-                        Go.named(context, RouteName.welcomeScreen);
-                      }
+                      await SharedPrefHelper.putBool("showOnBoard", true);
+                      setState(() {
+                        showOnBoard = true;
+                      });
+                      Go.named(context, RouteName.welcomeScreen);
                     },
                     height: 70,
                     elevation: 4,

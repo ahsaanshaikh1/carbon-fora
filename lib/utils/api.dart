@@ -20,18 +20,32 @@ class User {
   String signupProvider = "${api.base}/user/auth/signInWithProvider";
   String signup = "${api.base}/user/auth/signUp";
   String login = "${api.base}/user/auth/signIn";
+  String logout = "${api.base}/user/auth/logout";
+  String home = "${api.base}/user/home";
+  String voucher = "${api.base}/user/voucher";
+  String product = "${api.base}/user/product";
+  String leaderboard = "${api.base}/user/leaderboard";
+  String contact = "${api.base}/user/contact";
+  String actionLog = "${api.base}/user/actionLog";
+  String getActionLogs = "${api.base}/user/actionLog/my-actions";
   String verify = "${api.base}/user/auth/verified";
   String resend = "${api.base}/user/auth/resend-otp";
   String forgot = "${api.base}/user/auth/forgot-password";
   String updatePassword = "${api.base}/user/auth/reset-password";
   String updateProfile = "${api.base}/user/profile";
+  String blogs = "${api.base}/user/blog";
   String getprofile = "${api.base}/user/profile";
+  String fcmToken = "${api.base}/user/profile/fcm-token";
+  String wallet = "${api.base}/user/profile/wallet";
+  String walletReveal = "${api.base}/user/profile/wallet/reveal";
   String changePassowrd = "${api.base}/user/profile/change-password";
   String fcmNotification = "${api.base}/user/profile/fcm";
   String addWishlist = "${api.base}/app/wishlist";
   String getWishlist = "${api.base}/user/wishlist";
   String getProperty = "${api.base}/app/property";
   String userhome = "${api.base}/app/home";
+  String voucherRedemption = "${api.base}/user/redemption";
+
   String propertyBooking = "${api.base}/app/property/booking";
   String getMyBooking = "${api.base}/user/booking";
   String getSellerDetail = "${api.base}/app/seller";
@@ -64,6 +78,8 @@ class Common {
   String state = "${api.base}/common?state=true";
   String city = "${api.base}/common?city=true";
   String type = "${api.base}/common?type=true";
+  String common = "${api.base}/common";
+
   String subtype = "${api.base}/common?subType=true";
   String amenity = "${api.base}/common?amenity=true";
   String unit = "${api.base}/common?unit=true";

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:carbon_fora/main.dart';
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:carbon_fora/route_structure/go_navigator.dart';

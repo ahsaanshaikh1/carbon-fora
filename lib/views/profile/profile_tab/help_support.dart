@@ -3,6 +3,7 @@ import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/views/profile/profile_tab/contact_support/contact_screen.dart';
 import 'package:carbon_fora/views/profile/profile_tab/contact_support/faq_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpSupport extends StatefulWidget {
   const HelpSupport({super.key});
@@ -71,7 +72,21 @@ class _HelpSupportState extends State<HelpSupport> {
                     ),
                     _buildSupportOption(
                       title: "Send us an E-mail",
-                      onTap: () {},
+                      onTap: () async {
+                        final Uri emailUri = Uri(
+                          scheme: 'mailto',
+                          path: 'info@carbonfora.com',
+                        );
+
+                        if (await canLaunchUrl(emailUri)) {
+                          await launchUrl(emailUri);
+                        } else {
+                          final Uri gmailWebUri = Uri.parse(
+                            'https://mail.google.com/mail/?view=cm&to=info@carbonfora.com',
+                          );
+                          await launchUrl(gmailWebUri);
+                        }
+                      },
                     ),
                     _buildSupportOption(
                       title: "FAQs",

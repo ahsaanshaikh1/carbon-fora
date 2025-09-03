@@ -18,8 +18,8 @@ class RedeemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      width: 180,
+      height: 80,
+      width: 185,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: themewhitecolor.withAlpha(20),
@@ -32,28 +32,31 @@ class RedeemCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(iconPath),
+              Image.network(iconPath, height: 40),
               10.kW,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: mediumfontsize3,
-                      color: themewhitecolor,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: themewhitecolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
                     ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: themewhitecolor.withAlpha(150),
-                      fontWeight: FontWeight.bold,
-                      fontSize: smallfontsize1,
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: themewhitecolor.withAlpha(150),
+                        fontWeight: FontWeight.bold,
+                        fontSize: smallfontsize1,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

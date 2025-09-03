@@ -1,8 +1,11 @@
+import 'package:carbon_fora/model/blog_model.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class CarbonAcademy extends StatefulWidget {
-  const CarbonAcademy({super.key});
+  final BlogModel model;
+  const CarbonAcademy({super.key, required this.model});
 
   @override
   State<CarbonAcademy> createState() => _CarbonAcademyState();
@@ -26,56 +29,65 @@ class _CarbonAcademyState extends State<CarbonAcademy> {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Welcome to the Carbon Academy",
-                  style: TextStyle(
-                    color: themewhitecolor,
-                    fontSize: 19,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: themewhitecolor,
-                    border: Border.all(width: 1, color: themewhitecolor),
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  padding: EdgeInsets.all(1),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(11),
-                    child: Image.asset(
-                      "assets/images/png/carbon.png",
-                      width: double.infinity, // full screen width
-                      height: 280, // fixed height jaisa chahiye (adjust karen)
-                      fit: BoxFit
-                          .fitWidth, // width fit karega, height maintain rahegi
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    widget.model.title,
+                    style: TextStyle(
+                      color: themewhitecolor,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Learn how your everyday actions like recycling, saving energy, or using public transport reduce CO₂ emissions and earn you carbon credits. The Academy offers short, engaging lessons that explain carbon credits, offsets, and your real-world climate impact. \n \nComplete modules, earn badges, and unlock bonus credits as you build your knowledge. Empower yourself for a greener future—one lesson at a time.",
-                  style: TextStyle(fontSize: 17, color: themewhitecolor),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: themewhitecolor,
+                      border: Border.all(width: 1, color: themewhitecolor),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    padding: EdgeInsets.all(1),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(11),
+                      child: Image.network(
+                        widget.model.image,
+                        width: double.infinity,
+                        height: 280,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: 15),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: HtmlWidget(
+                    widget.model.shortDescription,
+                    textStyle: TextStyle(fontSize: 17, color: themewhitecolor),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: HtmlWidget(
+                    widget.model.description,
+                    textStyle: TextStyle(fontSize: 17, color: themewhitecolor),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

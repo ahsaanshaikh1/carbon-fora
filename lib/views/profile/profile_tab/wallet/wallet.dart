@@ -1,9 +1,18 @@
+import 'package:carbon_fora/provider/action_log/action_log_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
+import 'package:carbon_fora/provider/wallet/wallet.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
+import 'package:carbon_fora/utils/constants.dart';
 import 'package:carbon_fora/views/action_log/log_history.dart';
+import 'package:carbon_fora/widgets/empty_widget.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
+import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class MyWalletScreen extends StatefulWidget {
@@ -14,20 +23,40 @@ class MyWalletScreen extends StatefulWidget {
 }
 
 class _MyWalletScreenState extends State<MyWalletScreen> {
-  final List<LogItem> logs = [
-    LogItem("Bike", "+1.2 Carbon Credits", "Pending", "Today, 9:30 AM"),
-    LogItem("Recycle", "+0.6 Carbon Credits", "Verified", "Today, 9:30 AM"),
-    LogItem(
-      "Recycle",
-      "+0.6 Carbon Credits",
-      "Rejected",
-      "Today, 9:30 AM",
-      Icons.info_outline,
-    ),
-  ];
   int isSelected = 0;
   String? selectDays = 'All';
   List<String> daysList = ["All", "Weekly"];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      Provider.of<WalletPro>(context, listen: false).getWallet();
+    });
+    super.initState();
+  }
+
+  String formatNumber(double number) {
+    if (number >= 1000000000) {
+      return (number / 1000000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "B";
+    } else if (number >= 1000000) {
+      return (number / 1000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "M";
+    } else if (number >= 1000) {
+      return (number / 1000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "k";
+    } else {
+      return number
+          .toStringAsFixed(4)
+          .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -85,222 +114,176 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Image(
-                      image: AssetImage("assets/images/png/share.png"),
-                      width: 30,
-                      height: 30,
+                    GestureDetector(
+                      onTap: () {
+                        SharePlus.instance.share(
+                          ShareParams(
+                            text:
+                                Provider.of<WalletPro>(
+                                  context,
+                                  listen: false,
+                                ).map!['walletAddress'] ??
+                                "",
+                          ),
+                        );
+                      },
+                      child: Image(
+                        image: AssetImage("assets/images/png/share.png"),
+                        width: 30,
+                        height: 30,
+                      ),
                     ),
                   ],
                 ),
               ),
               20.kH,
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        FilledBox(
-                          color: themewhitecolor.withAlpha(20),
-                          padding: EdgeInsets.all(12),
-                          border: Border.all(width: .2, color: themewhitecolor),
-                          borderRadius: BorderRadius.circular(11),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Your Carbon Wallet ',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SuperTooltip(
-                                    showBarrier: true,
-                                    barrierColor: Colors.black.withOpacity(0.6),
-                                    sigmaX: 10,
-                                    sigmaY: 10,
-                                    content: FilledBox(
-                                      height: 150,
-                                      width: size.width / 100 * 70,
-                                      padding: EdgeInsets.all(10),
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: themewhitecolor,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                "Earned Dollar",
-                                                softWrap: true,
-                                                style: TextStyle(
-                                                  color: themeblackcolor,
-                                                ),
-                                              ),
-                                              ShaderMask(
-                                                shaderCallback: (Rect bounds) {
-                                                  return const LinearGradient(
-                                                    colors: [
-                                                      Color(0xFF4834AA),
-                                                      Color(0xFF1D8AA2),
-                                                    ],
-                                                    begin: Alignment.topLeft,
-                                                    end: Alignment.bottomRight,
-                                                  ).createShader(bounds);
-                                                },
-                                                blendMode: BlendMode.srcIn,
-                                                child: Image.asset(
-                                                  "assets/images/png/dollar.png",
-                                                  width: 35,
-                                                  height: 35,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          10.kH,
-                                          Text(
-                                            "Estimated value based on average carbon credit prices in the voluntary market. Actual redemption value may vary based on partner offers and market rates.",
-                                            style: TextStyle(
-                                              fontSize: smallfontsize1,
-                                              color: themegreytextcolor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    child: Icon(
-                                      Icons.info_outline,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                '\$1.47 USD Impact Value',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+              Consumer<WalletPro>(
+                builder: (context, provider, child) {
+                  return provider.isLoading
+                      ? Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: themewhitecolor,
+                            ),
                           ),
-                        ),
-                        25.kH,
-                        GridView.builder(
-                          itemCount: 2,
-                          shrinkWrap: true,
-                          primary: false,
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisExtent: 120,
-                                crossAxisSpacing: 12,
-                                mainAxisSpacing: 12,
-                              ),
-                          itemBuilder: (context, index) {
-                            return FilledBox(
-                              padding: EdgeInsets.all(12),
-                              color: themewhitecolor.withAlpha(20),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: themewhitecolor.withAlpha(100),
-                              ),
+                        )
+                      : Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Image.asset(
-                                        index == 0
-                                            ? "assets/images/png/plant.png"
-                                            : "assets/images/png/co2.png",
-                                        width: 50,
-                                      ),
-                                      Text(
-                                        index == 0 ? "12.6 kg" : "3.1 kg\nCO2e",
-                                        style: TextStyle(
-                                          fontSize: smallfontsize1,
-                                          color: themewhitecolor,
-                                          fontWeight: boldfontweight,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  25.kH,
-                                  Row(
-                                    children: [
-                                      Text(
-                                        index == 0
-                                            ? "Carbon Credit"
-                                            : "Total CO₂ Saved",
-                                        style: TextStyle(
-                                          fontSize: mediumfontsize5,
-                                          color: themewhitecolor,
-                                          fontWeight: boldfontweight,
-                                        ),
-                                      ),
-                                      15.kW,
-                                      index == 0
-                                          ? SuperTooltip(
-                                              showBarrier: true,
-                                              barrierColor: Colors.black
-                                                  .withOpacity(0.6),
-                                              sigmaX: 10,
-                                              sigmaY: 10,
-                                              content: FilledBox(
-                                                height: 150,
-                                                width: size.width / 100 * 80,
-                                                padding: EdgeInsets.all(8),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                  FilledBox(
+                                    color: themewhitecolor.withAlpha(20),
+                                    padding: EdgeInsets.all(12),
+                                    border: Border.all(
+                                      width: .2,
+                                      color: themewhitecolor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(11),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Your Wallet Address',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            8.kW,
+                                            GestureDetector(
+                                              onTap: () async {
+                                                await Clipboard.setData(
+                                                  ClipboardData(
+                                                    text:
+                                                        provider
+                                                            .map!['walletAddress'] ??
+                                                        "",
+                                                  ),
+                                                );
+                                                showTopAlertInfo(
+                                                  text: "Copied to clipboard",
+                                                  context: context,
+                                                );
+                                              },
+                                              child: Icon(
+                                                Icons.copy,
                                                 color: themewhitecolor,
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        const Text(
-                                                          "Carbon Credits",
-                                                          softWrap: true,
-                                                          style: TextStyle(
-                                                            color:
-                                                                themeblackcolor,
-                                                          ),
-                                                        ),
-                                                        Image.asset(
-                                                          "assets/images/png/plant-clr.png",
-                                                          width: 50,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    10.kH,
-                                                    Text(
-                                                      "Credits earned are calculated based on verified micro-actions and validated using timestamps, GPS, and image proof. Final acceptance depends on verification protocols.",
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            smallfontsize1,
-                                                        color:
-                                                            themegreytextcolor,
-                                                      ),
-                                                    ),
-                                                  ],
+                                                size: 22,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        5.kH,
+                                        Text(
+                                          provider.map!['walletAddress'] ?? "",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        10.kH,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 12,
+                                                  horizontal: 15,
+                                                ),
+                                                backgroundColor: Colors.white,
+                                                foregroundColor:
+                                                    Palette.themecolor,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                minimumSize: const Size(70, 30),
+                                              ),
+                                              onPressed: () {
+                                                if (Provider.of<AuthPro>(
+                                                  context,
+                                                  listen: false,
+                                                ).profile!.provider.contains(
+                                                  "EMAIL",
+                                                )) {
+                                                  showPasswordPopup(context);
+                                                } else {
+                                                  Provider.of<WalletPro>(
+                                                    context,
+                                                    listen: false,
+                                                  ).revealPrivateKey1(
+                                                    context: context,
+                                                    pass: "",
+                                                  );
+                                                }
+                                              },
+                                              child: Text(
+                                                "Reveal private key",
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              child: Icon(
-                                                Icons.info_outline,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  25.kH,
+
+                                  FilledBox(
+                                    color: themewhitecolor.withAlpha(20),
+                                    padding: EdgeInsets.all(12),
+                                    border: Border.all(
+                                      width: .2,
+                                      color: themewhitecolor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(11),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Your Carbon Wallet ',
+                                              style: TextStyle(
                                                 color: Colors.white,
+                                                fontSize: 16,
                                               ),
-                                            )
-                                          : SuperTooltip(
+                                            ),
+                                            SuperTooltip(
                                               showBarrier: true,
                                               barrierColor: Colors.black
                                                   .withOpacity(0.6),
@@ -321,22 +304,45 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                                               .spaceBetween,
                                                       children: [
                                                         const Text(
-                                                          "Total CO2 Saved",
+                                                          "Earned Dollar",
                                                           softWrap: true,
                                                           style: TextStyle(
                                                             color:
                                                                 themeblackcolor,
                                                           ),
                                                         ),
-                                                        Image.asset(
-                                                          "assets/images/png/co2-clr.png",
-                                                          width: 50,
+                                                        ShaderMask(
+                                                          shaderCallback: (Rect bounds) {
+                                                            return const LinearGradient(
+                                                              colors: [
+                                                                Color(
+                                                                  0xFF4834AA,
+                                                                ),
+                                                                Color(
+                                                                  0xFF1D8AA2,
+                                                                ),
+                                                              ],
+                                                              begin: Alignment
+                                                                  .topLeft,
+                                                              end: Alignment
+                                                                  .bottomRight,
+                                                            ).createShader(
+                                                              bounds,
+                                                            );
+                                                          },
+                                                          blendMode:
+                                                              BlendMode.srcIn,
+                                                          child: Image.asset(
+                                                            "assets/images/png/dollar.png",
+                                                            width: 35,
+                                                            height: 35,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
                                                     10.kH,
                                                     Text(
-                                                      "Total emissions reduced through your verified actions since signup. Calculated using emission factors aligned with IPCC guidelines.",
+                                                      "Estimated value based on average carbon credit prices in the voluntary market. Actual redemption value may vary based on partner offers and market rates.",
                                                       style: TextStyle(
                                                         fontSize:
                                                             smallfontsize1,
@@ -352,168 +358,454 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                                 color: Colors.white,
                                               ),
                                             ),
-                                    ],
+                                          ],
+                                        ),
+                                        Text(
+                                          '\$0 USD Impact Value',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  25.kH,
+                                  GridView.builder(
+                                    itemCount: 2,
+                                    shrinkWrap: true,
+                                    primary: false,
+                                    padding: EdgeInsets.zero,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisExtent: 130,
+                                          crossAxisSpacing: 12,
+                                          mainAxisSpacing: 12,
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      return FilledBox(
+                                        padding: EdgeInsets.all(12),
+                                        color: themewhitecolor.withAlpha(20),
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(
+                                          color: themewhitecolor.withAlpha(100),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Image.asset(
+                                                  index == 0
+                                                      ? "assets/images/png/plant.png"
+                                                      : "assets/images/png/co2.png",
+                                                  width: 50,
+                                                ),
+                                                index == 1
+                                                    ? Expanded(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Column(
+                                                              children: [
+                                                                Consumer<
+                                                                  AuthPro
+                                                                >(
+                                                                  builder:
+                                                                      (
+                                                                        context,
+                                                                        pro,
+                                                                        child,
+                                                                      ) {
+                                                                        return Text(
+                                                                          "${Provider.of<AuthPro>(context, listen: false).model != null ? formatNumber(Provider.of<AuthPro>(context, listen: false).model!.totalCo2Saved * 1000) : "0"} ",
+                                                                          style: TextStyle(
+                                                                            fontSize:
+                                                                                17,
+                                                                            color:
+                                                                                themewhitecolor,
+                                                                            fontWeight:
+                                                                                boldfontweight,
+                                                                          ),
+                                                                          maxLines:
+                                                                              1,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                        );
+                                                                      },
+                                                                ),
+                                                                3.kW,
+                                                                Text(
+                                                                  "kgCO2e",
+                                                                  style: TextStyle(
+                                                                    fontSize:
+                                                                        13,
+                                                                    color:
+                                                                        themewhitecolor,
+                                                                    fontWeight:
+                                                                        boldfontweight,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        provider.map!['availableCredits'] !=
+                                                                null
+                                                            ? provider
+                                                                  .map!['availableCredits']
+                                                                  .toStringAsFixed(
+                                                                    6,
+                                                                  )
+                                                            : "0",
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          color:
+                                                              themewhitecolor,
+                                                          fontWeight:
+                                                              boldfontweight,
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                            25.kH,
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  index == 0
+                                                      ? "Carbon Credit"
+                                                      : "Total CO₂ Saved",
+                                                  style: TextStyle(
+                                                    fontSize: mediumfontsize5,
+                                                    color: themewhitecolor,
+                                                    fontWeight: boldfontweight,
+                                                  ),
+                                                ),
+                                                15.kW,
+                                                index == 0
+                                                    ? SuperTooltip(
+                                                        showBarrier: true,
+                                                        barrierColor: Colors
+                                                            .black
+                                                            .withOpacity(0.6),
+                                                        sigmaX: 10,
+                                                        sigmaY: 10,
+                                                        content: FilledBox(
+                                                          height: 150,
+                                                          width:
+                                                              size.width /
+                                                              100 *
+                                                              80,
+                                                          padding:
+                                                              EdgeInsets.all(8),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                10,
+                                                              ),
+                                                          color:
+                                                              themewhitecolor,
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  const Text(
+                                                                    "Carbon Credits",
+                                                                    softWrap:
+                                                                        true,
+                                                                    style: TextStyle(
+                                                                      color:
+                                                                          themeblackcolor,
+                                                                    ),
+                                                                  ),
+                                                                  Image.asset(
+                                                                    "assets/images/png/plant-clr.png",
+                                                                    width: 50,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              10.kH,
+                                                              Text(
+                                                                "Credits earned are calculated based on verified micro-actions and validated using timestamps, GPS, and image proof. Final acceptance depends on verification protocols.",
+                                                                style: TextStyle(
+                                                                  fontSize:
+                                                                      smallfontsize1,
+                                                                  color:
+                                                                      themegreytextcolor,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        child: Icon(
+                                                          Icons.info_outline,
+                                                          color: Colors.white,
+                                                        ),
+                                                      )
+                                                    : SuperTooltip(
+                                                        showBarrier: true,
+                                                        barrierColor: Colors
+                                                            .black
+                                                            .withOpacity(0.6),
+                                                        sigmaX: 10,
+                                                        sigmaY: 10,
+                                                        content: FilledBox(
+                                                          height: 150,
+                                                          width:
+                                                              size.width /
+                                                              100 *
+                                                              70,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                10,
+                                                              ),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                10,
+                                                              ),
+                                                          color:
+                                                              themewhitecolor,
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  const Text(
+                                                                    "Total CO2 Saved",
+                                                                    softWrap:
+                                                                        true,
+                                                                    style: TextStyle(
+                                                                      color:
+                                                                          themeblackcolor,
+                                                                    ),
+                                                                  ),
+                                                                  Image.asset(
+                                                                    "assets/images/png/co2-clr.png",
+                                                                    width: 50,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              10.kH,
+                                                              Text(
+                                                                "Total emissions reduced through your verified actions since signup. Calculated using emission factors aligned with IPCC guidelines.",
+                                                                style: TextStyle(
+                                                                  fontSize:
+                                                                      smallfontsize1,
+                                                                  color:
+                                                                      themegreytextcolor,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        child: Icon(
+                                                          Icons.info_outline,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: 24),
+                                  // Row(
+                                  //   children: [
+                                  //     const Text(
+                                  //       'Recent Activity',
+                                  //       style: TextStyle(
+                                  //         color: Colors.white,
+                                  //         fontSize: 18,
+                                  //         fontWeight: FontWeight.bold,
+                                  //       ),
+                                  //     ),
+                                  //     Spacer(),
+                                  //     FilledBox(
+                                  //       padding: EdgeInsets.zero,
+                                  //       color: Colors.white24,
+                                  //       borderRadius: BorderRadius.circular(12),
+                                  //       child: Row(
+                                  //         children: List.generate(
+                                  //           2,
+                                  //           (index) => FilledBox(
+                                  //             onTap: () {
+                                  //               setState(() {
+                                  //                 isSelected = index;
+                                  //               });
+                                  //             },
+                                  //             width: 85,
+                                  //             color: isSelected == index
+                                  //                 ? Colors.white
+                                  //                 : Colors.transparent,
+                                  //             borderRadius: isSelected == 0
+                                  //                 ? BorderRadius.only(
+                                  //                     topLeft: Radius.circular(
+                                  //                       12,
+                                  //                     ),
+                                  //                     bottomLeft:
+                                  //                         Radius.circular(12),
+                                  //                   )
+                                  //                 : BorderRadius.only(
+                                  //                     topRight: Radius.circular(
+                                  //                       12,
+                                  //                     ),
+                                  //                     bottomRight:
+                                  //                         Radius.circular(12),
+                                  //                   ),
+                                  //             padding: EdgeInsets.all(10),
+                                  //             child: Center(
+                                  //               child: Text(
+                                  //                 index == 0
+                                  //                     ? "This Month"
+                                  //                     : "All Time",
+                                  //                 style: TextStyle(
+                                  //                   color: isSelected == index
+                                  //                       ? Color(0xFF1D8AA2)
+                                  //                       : Colors.white,
+                                  //                   fontWeight: FontWeight.w500,
+                                  //                   fontSize: smallfontsize3,
+                                  //                 ),
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     10.kW,
+                                  //     SizedBox(
+                                  //       height: 40,
+                                  //       width: 85,
+                                  //       child: DropdownButtonFormField(
+                                  //         iconDisabledColor: themewhitecolor,
+                                  //         iconEnabledColor: themewhitecolor,
+                                  //         decoration: InputDecoration(
+                                  //           enabledBorder: OutlineInputBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(12),
+                                  //             borderSide: const BorderSide(
+                                  //               color: Colors
+                                  //                   .white, // White border
+                                  //             ),
+                                  //           ),
+                                  //           focusedBorder: OutlineInputBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(12),
+                                  //             borderSide: const BorderSide(
+                                  //               color: Colors
+                                  //                   .white, // White border on focus
+                                  //               width: 1.5,
+                                  //             ),
+                                  //           ),
+                                  //           border: OutlineInputBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(12),
+                                  //             borderSide: const BorderSide(
+                                  //               color: Colors.white,
+                                  //             ),
+                                  //           ),
+                                  //           contentPadding:
+                                  //               const EdgeInsets.all(8),
+                                  //         ),
+                                  //         value: selectDays,
+                                  //         dropdownColor: Palette.primaryColor,
+                                  //         menuMaxHeight: 200,
+                                  //         isDense: true,
+                                  //         items: daysList
+                                  //             .map(
+                                  //               (item) => DropdownMenuItem(
+                                  //                 value: item,
+                                  //                 child: Text(
+                                  //                   item,
+                                  //                   style: const TextStyle(
+                                  //                     fontSize: 10,
+                                  //                     color: themewhitecolor,
+                                  //                   ),
+                                  //                   maxLines: 1,
+                                  //                   overflow:
+                                  //                       TextOverflow.ellipsis,
+                                  //                 ),
+                                  //               ),
+                                  //             )
+                                  //             .toList(),
+                                  //         onChanged: (item) =>
+                                  //             setState(() => daysList != item),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // 20.kH,
+                                  // // ListView.separated(
+                                  // //   shrinkWrap: true,
+                                  // //   primary: false,
+                                  // //   physics: NeverScrollableScrollPhysics(),
+                                  // //   itemCount: logs.length,
+                                  // //   padding: EdgeInsets.zero,
+                                  // //   itemBuilder: (context, index) {
+                                  // //     return LogCard(
+                                  // //       log: Provider.of<ActionLogPro>(
+                                  // //         context,
+                                  // //         listen: false,
+                                  // //       ).logs[0],
+                                  // //     );
+                                  // //   },
+                                  // //   separatorBuilder: (context, seprator) {
+                                  // //     return 15.kH;
+                                  // //   },
+                                  // // ),
+                                  // 12.kH,
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //     horizontal: 30,
+                                  //   ),
+                                  //   child: _bottomButton(
+                                  //     "Redeem for Rewards",
+                                  //     () async {},
+                                  //   ),
+                                  // ),
+                                  // 10.kH,
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                  //   children: [
+                                  //     Expanded(
+                                  //       child: const Center(
+                                  //         child: Text(
+                                  //           'Conversion rate: 1 credit ≈ \$0.12 USD\nLast updated: 21/05/2025',
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //             color: Colors.white70,
+                                  //             fontSize: 12,
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  90.kH,
                                 ],
                               ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          children: [
-                            const Text(
-                              'Recent Activity',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
                             ),
-                            Spacer(),
-                            FilledBox(
-                              padding: EdgeInsets.zero,
-                              color: Colors.white24,
-                              borderRadius: BorderRadius.circular(12),
-                              child: Row(
-                                children: List.generate(
-                                  2,
-                                  (index) => FilledBox(
-                                    onTap: () {
-                                      setState(() {
-                                        isSelected = index;
-                                      });
-                                    },
-                                    width: 85,
-                                    color: isSelected == index
-                                        ? Colors.white
-                                        : Colors.transparent,
-                                    borderRadius: isSelected == 0
-                                        ? BorderRadius.only(
-                                            topLeft: Radius.circular(12),
-                                            bottomLeft: Radius.circular(12),
-                                          )
-                                        : BorderRadius.only(
-                                            topRight: Radius.circular(12),
-                                            bottomRight: Radius.circular(12),
-                                          ),
-                                    padding: EdgeInsets.all(10),
-                                    child: Center(
-                                      child: Text(
-                                        index == 0 ? "This Month" : "All Time",
-                                        style: TextStyle(
-                                          color: isSelected == index
-                                              ? Color(0xFF1D8AA2)
-                                              : Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: smallfontsize3,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            10.kW,
-                            SizedBox(
-                              height: 40,
-                              width: 85,
-                              child: DropdownButtonFormField(
-                                iconDisabledColor: themewhitecolor,
-                                iconEnabledColor: themewhitecolor,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color: Colors.white, // White border
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color:
-                                          Colors.white, // White border on focus
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  contentPadding: const EdgeInsets.all(8),
-                                ),
-                                value: selectDays,
-                                dropdownColor: Palette.primaryColor,
-                                menuMaxHeight: 200,
-                                isDense: true,
-                                items: daysList
-                                    .map(
-                                      (item) => DropdownMenuItem(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            color: themewhitecolor,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: (item) =>
-                                    setState(() => daysList != item),
-                              ),
-                            ),
-                          ],
-                        ),
-                        20.kH,
-                        ListView.separated(
-                          shrinkWrap: true,
-                          primary: false,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: logs.length,
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            return LogCard(log: logs[index]);
-                          },
-                          separatorBuilder: (context, seprator) {
-                            return 15.kH;
-                          },
-                        ),
-                        12.kH,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: _bottomButton(
-                            "Redeem for Rewards",
-                            () async {},
                           ),
-                        ),
-                        10.kH,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: const Center(
-                                child: Text(
-                                  'Conversion rate: 1 credit ≈ \$0.12 USD\nLast updated: 21/05/2025',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                        );
+                },
               ),
             ],
           ),
@@ -537,4 +829,46 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
       ),
     );
   }
+}
+
+void showPasswordPopup(BuildContext context) {
+  final TextEditingController passwordController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text("Enter Password"),
+        content: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: const InputDecoration(
+            labelText: "Password",
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context), // close popup
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<WalletPro>(context, listen: false).revealPrivateKey(
+                context: context,
+                pass: passwordController.text,
+              );
+              // final password = passwordController.text;
+              // Navigator.pop(context); // close popup
+              // ScaffoldMessenger.of(
+              //   context,
+              // ).showSnackBar(SnackBar(content: Text("Password: $password")));
+            },
+            child: const Text("Submit"),
+          ),
+        ],
+      );
+    },
+  );
 }

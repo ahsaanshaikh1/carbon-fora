@@ -2,10 +2,13 @@ import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/redeem/redemption_history.dart';
 import 'package:carbon_fora/widgets/custom_text_field.dart';
+import 'package:carbon_fora/widgets/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RedemptionConfirmation extends StatefulWidget {
-  const RedemptionConfirmation({super.key});
+  final Map data;
+  const RedemptionConfirmation({super.key, required this.data});
 
   @override
   State<RedemptionConfirmation> createState() => _RedemptionConfirmationState();
@@ -84,7 +87,7 @@ class _RedemptionConfirmationState extends State<RedemptionConfirmation> {
                 SizedBox(height: 30),
                 Center(
                   child: Text(
-                    "Success! Your voucher has\n been sent to your registered\n email and phone.",
+                    "Success!",
                     style: TextStyle(
                       fontSize: 20,
                       color: themewhitecolor,
@@ -96,99 +99,89 @@ class _RedemptionConfirmationState extends State<RedemptionConfirmation> {
                 ),
                 SizedBox(height: 40),
 
-                GridView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: 4,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 65,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
+                Container(
+                  height: 50,
+                  // width: 250,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.white70),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.white70),
-                        borderRadius: BorderRadius.circular(17),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.data['voucherDetailsSnapshot']['code'],
+                        style: TextStyle(color: themewhitecolor, fontSize: 18),
+                        textAlign: TextAlign.center,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            index == 0
-                                ? "BookMe.pk"
-                                : index == 1
-                                ? "\$1500 off"
-                                : index == 2
-                                ? "xxxxxxxx"
-                                : "Aug 31, 2025",
-                            style: TextStyle(
-                              color: themewhitecolor,
-                              fontSize: 18,
+                      8.kW,
+                      GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  widget.data['voucherDetailsSnapshot']['code'],
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          index == 2 ? 8.kW : 0.kW,
-                          index == 2
-                              ? Image.asset(
-                                  "assets/images/png/copy.png",
-                                  height: 16,
-                                )
-                              : SizedBox(),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(height: 40),
-                Text(
-                  "(optional link to partner's site/app)",
-                  style: TextStyle(color: themewhitecolor, fontSize: 14),
-                  textAlign: TextAlign.start,
-                ),
-                SizedBox(height: 20),
-                CustomTextField(
-                  textInputType: TextInputType.text,
-                  isOutlinedInputBorder: true,
-                  padding: const EdgeInsets.all(18),
-                  enabledBorderColor: themewhitecolor,
-                  focusedBorderColor: Palette.themecolor,
-                  borderWidth: 1.5,
-                ),
-                SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "You can also find this in",
-                      style: TextStyle(color: themewhitecolor, fontSize: 14),
-                    ),
-                    SizedBox(width: 5),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RedemptionHistory(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "'My Redemptions' ",
-                        style: TextStyle(
-                          color: themewhitecolor,
-                          fontWeight: FontWeight.bold,
+                          );
+                          showSnackBar(context, "Code copied to clipboard.");
+                        },
+                        child: Image.asset(
+                          "assets/images/png/copy.png",
+                          height: 16,
                         ),
                       ),
-                    ),
-                    Text(
-                      "tab.",
-                      style: TextStyle(color: themewhitecolor, fontSize: 14),
-                    ),
-                    SizedBox(width: 5),
-                  ],
+                    ],
+                  ),
                 ),
+
+                // SizedBox(height: 40),
+                // Text(
+                //   "(optional link to partner's site/app)",
+                //   style: TextStyle(color: themewhitecolor, fontSize: 14),
+                //   textAlign: TextAlign.start,
+                // ),
+                // SizedBox(height: 20),
+                // CustomTextField(
+                //   textInputType: TextInputType.text,
+                //   isOutlinedInputBorder: true,
+                //   padding: const EdgeInsets.all(18),
+                //   enabledBorderColor: themewhitecolor,
+                //   focusedBorderColor: Palette.themecolor,
+                //   borderWidth: 1.5,
+                // ),
+                // SizedBox(height: 40),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       "You can also find this in",
+                //       style: TextStyle(color: themewhitecolor, fontSize: 14),
+                //     ),
+                //     SizedBox(width: 5),
+                //     InkWell(
+                //       onTap: () {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => RedemptionHistory(),
+                //           ),
+                //         );
+                //       },
+                //       child: Text(
+                //         "'My Redemptions' ",
+                //         style: TextStyle(
+                //           color: themewhitecolor,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //     ),
+                //     Text(
+                //       "tab.",
+                //       style: TextStyle(color: themewhitecolor, fontSize: 14),
+                //     ),
+                //     SizedBox(width: 5),
+                //   ],
+                // ),
               ],
             ),
           ),

@@ -1,8 +1,12 @@
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
+import 'package:carbon_fora/provider/common/common_pro.dart';
+import 'package:carbon_fora/provider/leaderboard/leaderboard_pro.dart';
 import 'package:carbon_fora/theme/colors.dart';
 import 'package:carbon_fora/theme/font_structures.dart';
 import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 
 class LeaderboardScreen extends StatefulWidget {
@@ -16,8 +20,41 @@ class LeaderboardScreen extends StatefulWidget {
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
   int select = 0;
   int isSelected = 0;
-  String? selectDays = 'Global';
-  List<String> daysList = ["Global", "Weekly"];
+  String formatNumber(double number) {
+    if (number >= 1000000000) {
+      return (number / 1000000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "B";
+    } else if (number >= 1000000) {
+      return (number / 1000000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "M";
+    } else if (number >= 1000) {
+      return (number / 1000)
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "") +
+          "k";
+    } else {
+      return number
+          .toStringAsFixed(4)
+          .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+    }
+  }
+
+  // String? selectDays = 'All Time';
+  // List<String> daysList = ["All Time", "Monthly", "Weekly"];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((val) {
+      Provider.of<LeaderboardPro>(
+        context,
+        listen: false,
+      ).getLeaderboardData(context: context, period: "all_time");
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +140,31 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                     setState(() {
                                       select = index;
                                     });
+                                    if (select == 0) {
+                                      Provider.of<LeaderboardPro>(
+                                        context,
+                                        listen: false,
+                                      ).getLeaderboardData(
+                                        context: context,
+                                        period: "all_time",
+                                      );
+                                    } else if (select == 1) {
+                                      Provider.of<LeaderboardPro>(
+                                        context,
+                                        listen: false,
+                                      ).getLeaderboardData(
+                                        context: context,
+                                        period: "monthly",
+                                      );
+                                    } else {
+                                      Provider.of<LeaderboardPro>(
+                                        context,
+                                        listen: false,
+                                      ).getLeaderboardData(
+                                        context: context,
+                                        period: "weekly",
+                                      );
+                                    }
                                   },
                                   padding: const EdgeInsets.all(10),
                                   color: select == index
@@ -112,10 +174,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                   child: Center(
                                     child: Text(
                                       index == 0
-                                          ? "Weekly"
+                                          ? "All Time"
                                           : index == 1
                                           ? "Monthly"
-                                          : "All Time",
+                                          : "Weekly",
                                       style: TextStyle(
                                         color: select == index
                                             ? Color(0xFF0F6C9C)
@@ -131,7 +193,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           ),
                         ),
                         20.kH,
-                        // Ranking title row with info
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -141,59 +203,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                              width: 85,
-                              child: DropdownButtonFormField(
-                                iconDisabledColor: themewhitecolor,
-                                iconEnabledColor: themewhitecolor,
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color: Colors.white, // White border
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color:
-                                          Colors.white, // White border on focus
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  contentPadding: const EdgeInsets.all(8),
-                                ),
-                                value: selectDays,
-                                dropdownColor: Palette.primaryColor,
-                                menuMaxHeight: 200,
-                                isDense: true,
-                                items: daysList
-                                    .map(
-                                      (item) => DropdownMenuItem(
-                                        value: item,
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            color: themewhitecolor,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: (item) =>
-                                    setState(() => daysList != item),
                               ),
                             ),
                           ],
@@ -213,7 +222,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
                               Text(
-                                "#1 Username",
+                                "Username",
                                 style: TextStyle(color: Colors.white),
                               ),
                               Row(
@@ -238,105 +247,115 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-
-                        // Ranking Cards
-                        _rankingTile(
-                          "Huzaifa Arain",
-                          "Gold",
-                          152.4,
-                          36.2,
-                          context,
-                        ),
-                        _rankingTile(
-                          "Huzaifa Arain",
-                          "Silver",
-                          152.4,
-                          36.2,
-                          context,
-                        ),
-                        _rankingTile(
-                          "Huzaifa Arain",
-                          "Bronze",
-                          152.4,
-                          36.2,
-                          context,
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Your Rank
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Your Rank",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
-                        _yourRankTile(
-                          "Huzaifa Arain",
-                          41.8,
-                          9.3,
-                          context,
-                          size,
-                        ),
-
-                        const SizedBox(height: 10),
-                        // Most Recycled
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: CircleAvatar(
-                              radius: 24,
-                              backgroundColor: Colors.white,
-                              child: Image.asset(
-                                "assets/images/png/man.png",
-                                width: 45,
-                              ),
-                            ),
-                            title: const Text(
-                              "Huzaifa Arain",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.recycling, color: themegreencolor),
-                                  SizedBox(width: 3),
-                                  Text(
-                                    "Most Recycled",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
+                        Consumer<LeaderboardPro>(
+                          builder: (context, provider, child) {
+                            return provider.isLoading
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 50),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: themewhitecolor,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                  )
+                                : Column(
+                                    children: [
+                                      ListView.builder(
+                                        itemCount: provider.ranks.length,
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        itemBuilder: (context, index) {
+                                          return _rankingTile(
+                                            provider.ranks[index].userName,
+                                            provider.ranks[index].rank
+                                                .toString(),
+                                            provider.ranks[index].creditsEarned,
+                                            provider.ranks[index].co2Saved,
+                                            context,
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(height: 20),
+
+                                      // Your Rank
+                                      const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          "Your Rank",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+
+                                      _rankingTile(
+                                        "${Provider.of<AuthPro>(context, listen: false).profile!.firstName} ${Provider.of<AuthPro>(context, listen: false).profile!.lastName}",
+                                        provider.userRank!.rank.toString(),
+                                        provider.userRank!.creditsEarned,
+                                        provider.userRank!.co2Saved,
+                                        context,
+                                      ),
+                                      100.kH,
+                                    ],
+                                  );
+                          },
                         ),
+
+                        // const SizedBox(height: 10),
+                        // // Most Recycled
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(
+                        //     horizontal: 16,
+                        //     vertical: 12,
+                        //   ),
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.white.withOpacity(0.1),
+                        //     borderRadius: BorderRadius.circular(16),
+                        //   ),
+                        //   child: ListTile(
+                        //     contentPadding: EdgeInsets.zero,
+                        //     leading: CircleAvatar(
+                        //       radius: 24,
+                        //       backgroundColor: Colors.white,
+                        //       child: Image.asset(
+                        //         "assets/images/png/man.png",
+                        //         width: 45,
+                        //       ),
+                        //     ),
+                        //     title: const Text(
+                        //       "Huzaifa Arain",
+                        //       style: TextStyle(
+                        //         color: Colors.white,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //     subtitle: Padding(
+                        //       padding: const EdgeInsets.symmetric(vertical: 4),
+                        //       child: Row(
+                        //         children: [
+                        //           Icon(Icons.recycling, color: themegreencolor),
+                        //           SizedBox(width: 3),
+                        //           Text(
+                        //             "Most Recycled",
+                        //             style: TextStyle(
+                        //               color: Colors.white,
+                        //               fontSize: 13,
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
                 ),
               ),
+              105.kH,
             ],
           ),
         ),
@@ -354,17 +373,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     String medalLabel;
 
     switch (medal) {
-      case "Gold":
+      case "1":
         medalLabel = "🥇 Gold";
         break;
-      case "Silver":
+      case "2":
         medalLabel = "🥈 Silver";
         break;
-      case "Bronze":
+      case "3":
         medalLabel = "🥉 Bronze";
         break;
       default:
-        medalLabel = "";
+        medalLabel = medal + "th";
     }
 
     return Container(
@@ -414,14 +433,17 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  credits.toStringAsFixed(1),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: Text(
+                    credits.toStringAsFixed(6),
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                10.kW,
+                5.kW,
                 SuperTooltip(
                   showBarrier: true,
                   barrierColor: Colors.black.withOpacity(0.6),
@@ -474,7 +496,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           Expanded(
             flex: 3,
             child: Text(
-              "${co2.toStringAsFixed(1)} kg",
+              "${formatNumber(co2 * 1000)} kg",
               textAlign: TextAlign.end,
               style: const TextStyle(
                 color: Colors.white,

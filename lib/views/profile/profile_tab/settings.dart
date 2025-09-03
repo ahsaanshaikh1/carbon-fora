@@ -1,3 +1,5 @@
+import 'package:app_settings/app_settings.dart';
+import 'package:carbon_fora/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -35,40 +37,51 @@ class _SettingScreenState extends State<SettingScreen> {
                   horizontal: 20.0,
                   vertical: 10,
                 ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white30),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.notifications, color: Colors.white),
-                          SizedBox(width: 10),
-                          Text(
-                            "Notification",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      Switch(
-                        value: select,
-                        onChanged: (bool value) {
-                          setState(() {
-                            select = value;
-                          });
-                        },
-                        activeColor: Colors.white,
-                        inactiveTrackColor: Colors.white24,
-                      ),
-                    ],
+                child: GestureDetector(
+                  onTap: () {
+                    AppSettings.openAppSettings(
+                      type: AppSettingsType.notification,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white30),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: const [
+                            Icon(Icons.notifications, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              "Notification",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Icon(Icons.arrow_forward_ios, color: themewhitecolor),
+                        // Switch(
+                        //   value: select,
+                        //   onChanged: (bool value) {
+                        //     setState(() {
+                        //       select = value;
+                        //     });
+                        //   },
+                        //   activeColor: Colors.white,
+                        //   inactiveTrackColor: Colors.white24,
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
               ),

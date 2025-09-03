@@ -1,4 +1,4 @@
-import 'package:carbon_fora/provider/auth_pro.dart';
+import 'package:carbon_fora/provider/auth/auth_pro.dart';
 import 'package:carbon_fora/utils/helper/validator.dart';
 import 'package:carbon_fora/widgets/custom_icon_button.dart';
 import 'package:carbon_fora/widgets/custom_text_field.dart';
@@ -213,6 +213,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     enabledBorderColor: themewhitecolor,
                     focusedBorderColor: themewhitecolor,
                     obscureText: confvisiblePass,
+                    validator: (val) {
+                      if (val!.trim().isEmpty) {
+                        return "";
+                      } else if (val != passwordController.text) {
+                        return "";
+                      }
+                      return null;
+                    },
                     suffix: CustomIconButton(
                       onTap: () {
                         setState(() {

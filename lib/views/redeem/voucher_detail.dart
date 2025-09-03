@@ -1,15 +1,144 @@
+import 'package:carbon_fora/model/voucher_model.dart';
+import 'package:carbon_fora/provider/voucher/voucher_pro.dart';
 import 'package:carbon_fora/theme/colors.dart';
+import 'package:carbon_fora/theme/font_structures.dart';
+import 'package:carbon_fora/theme/spacing.dart';
 import 'package:carbon_fora/views/redeem/redemption_confirm.dart';
+import 'package:carbon_fora/widgets/custom_button.dart';
+import 'package:carbon_fora/widgets/filled_box.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class VoucherDetail extends StatefulWidget {
-  const VoucherDetail({super.key});
+  final VoucherModel model;
+  const VoucherDetail({super.key, required this.model});
 
   @override
   State<VoucherDetail> createState() => _VoucherDetailState();
 }
 
 class _VoucherDetailState extends State<VoucherDetail> {
+  Future<Object?> logout(Size size) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          scrollable: true,
+          surfaceTintColor: themewhitecolor,
+          backgroundColor: themewhitecolor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          ),
+          titlePadding: const EdgeInsets.all(24),
+          actionsPadding: const EdgeInsets.all(0),
+          buttonPadding: const EdgeInsets.all(0),
+          title: Form(
+            child: SizedBox(
+              width: size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Text(
+                      "Are you sure ?",
+                      textScaleFactor: 1.0,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: themeblackcolor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  40.kH,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledBox(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          height: 55,
+                          color: themewhitecolor,
+                          padding: EdgeInsets.zero,
+                          boxShadow: const [
+                            BoxShadow(color: themegreycolor, blurRadius: 10),
+                          ],
+                          child: const Center(
+                            child: Text(
+                              "Cancel",
+                              textScaleFactor: 1.0,
+                              style: TextStyle(
+                                fontSize: mediumfontsize4,
+                                fontWeight: boldfontweight,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      20.kW,
+                      Expanded(
+                        child: CustomButton(
+                          onTap: () {
+                            Provider.of<VoucherPro>(
+                              context,
+                              listen: false,
+                            ).voucherRedeem(
+                              context: context,
+                              voucherId: widget.model.id,
+                            );
+                          },
+                          height: 55,
+                          borderRadius: BorderRadius.circular(12),
+                          child: const Text(
+                            "Yes",
+                            textScaleFactor: 1.0,
+                            style: TextStyle(
+                              color: themewhitecolor,
+                              fontSize: mediumfontsize4,
+                              fontWeight: boldfontweight,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomButton(String text, BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => RedemptionConfirmation()),
+          // );
+          logout(MediaQuery.sizeOf(context));
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xfe402BB5),
+          minimumSize: const Size(double.infinity, 58),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(11),
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,8 +216,8 @@ class _VoucherDetailState extends State<VoucherDetail> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(11),
-                    child: Image.asset(
-                      "assets/images/png/travel.png",
+                    child: Image.network(
+                      widget.model.brand.companyLogo,
                       width: double.infinity, // full screen width
                       height: 320, // fixed height jaisa chahiye (adjust karen)
                       fit: BoxFit
@@ -98,7 +227,7 @@ class _VoucherDetailState extends State<VoucherDetail> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Travel Voucher",
+                  widget.model.name,
                   style: TextStyle(
                     fontSize: 18,
                     color: themewhitecolor,
@@ -107,28 +236,27 @@ class _VoucherDetailState extends State<VoucherDetail> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Rs: 1500 off on domestic bus travel with BookMe.pk. Valid on app and web.",
-                  maxLines: 2,
+                  widget.model.description,
                   style: TextStyle(fontSize: 14, color: themewhitecolor),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Cost: 40 Carbon Credits",
+                  "Cost: ${widget.model.creditCost} Carbon Credits",
+                  style: TextStyle(fontSize: 14, color: themewhitecolor),
+                ),
+                // SizedBox(height: 20),
+                // Text(
+                //   "Delivery - Instant via email or SMS",
+                //   style: TextStyle(fontSize: 14, color: themewhitecolor),
+                // ),
+                SizedBox(height: 20),
+                Text(
+                  "Validity - ${widget.model.validity} days",
                   style: TextStyle(fontSize: 14, color: themewhitecolor),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Estimated Value: \$5.20",
-                  style: TextStyle(fontSize: 14, color: themewhitecolor),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Delivery - Instant via email or SMS",
-                  style: TextStyle(fontSize: 14, color: themewhitecolor),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Validity - e.g. Valid till Aug 31, 2025",
+                  "Brand - ${widget.model.brand.name}",
                   style: TextStyle(fontSize: 14, color: themewhitecolor),
                 ),
                 SizedBox(height: 30),
@@ -137,31 +265,6 @@ class _VoucherDetailState extends State<VoucherDetail> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _bottomButton(String text, BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => RedemptionConfirmation()),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Color(0xfe402BB5),
-          minimumSize: const Size(double.infinity, 58),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(11),
-          ),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );

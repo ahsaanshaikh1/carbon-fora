@@ -1,6 +1,6 @@
 class ValidatorHelper {
   static String? validator(String? value) {
-    if (value == "") {
+    if (value == "" || value!.trim().isEmpty) {
       return "";
     }
     return null;
@@ -16,8 +16,9 @@ class ValidatorHelper {
   static String? emailValidator(String? value) {
     if (value!.isEmpty) {
       return "";
-    } else if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-        .hasMatch(value)) {
+    } else if (!RegExp(
+      "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]",
+    ).hasMatch(value)) {
       return ("Invalid email format");
     }
     return null;
@@ -29,8 +30,8 @@ class ValidatorHelper {
     } else if (value.length < 8) {
       return ("Password Must be more than 8 characters");
     } else if (!RegExp(
-            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-        .hasMatch(value)) {
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
+    ).hasMatch(value)) {
       return ("Password should contain upper,lower,digit and Special character");
     }
     return null;
