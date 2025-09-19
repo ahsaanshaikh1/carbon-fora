@@ -23,6 +23,7 @@ class VoucherPro with ChangeNotifier {
   getVoucher({
     required BuildContext context,
     required String categId,
+    required String subCategId,
     required bool fresh,
   }) async {
     if (fresh) {
@@ -36,7 +37,7 @@ class VoucherPro with ChangeNotifier {
         notifyListeners();
         // vouchers = [];
         var res = await ApiHandler.getFunction(
-          api: Api.user.voucher + "?page=$current&category=$categId",
+          api: Api.user.voucher + "?page=$current&category=$categId&subCategory=$subCategId",
           authorization: true,
           headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
         );
@@ -95,6 +96,7 @@ class VoucherPro with ChangeNotifier {
     required BuildContext context,
     required String categId,
     required bool fresh,
+    required String subCategId,
   }) async {
     if (fresh) {
       products = [];
@@ -106,7 +108,7 @@ class VoucherPro with ChangeNotifier {
         isLoading = true;
         notifyListeners();
         var res = await ApiHandler.getFunction(
-          api: Api.user.product + "?page=$current1&category=$categId",
+          api: Api.user.product + "?page=$current1&category=$categId&subCategory=$subCategId",
           authorization: true,
           headers: {'x-api-key': '9f8e2a3b-7c4d-4e9a-b1c0-6d5f8e7a9b2c'},
         );

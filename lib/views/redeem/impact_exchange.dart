@@ -1,3 +1,4 @@
+import 'package:carbon_fora/model/category_model.dart';
 import 'package:carbon_fora/model/product_model.dart';
 import 'package:carbon_fora/model/voucher_model.dart';
 import 'package:carbon_fora/provider/common/common_pro.dart';
@@ -35,12 +36,18 @@ class _ImpactExchangeState extends State<ImpactExchange> {
             ? Provider.of<VoucherPro>(context, listen: false).getVoucher(
                 fresh: false,
                 context: context,
-                categId: category == null ? "" : category!,
+                categId: category == null || subCategory == null
+                    ? ""
+                    : category!,
+                subCategId: subCategory == null ? "" : subCategory!,
               )
             : Provider.of<VoucherPro>(context, listen: false).getProducts(
                 fresh: false,
                 context: context,
-                categId: category == null ? "" : category!,
+                categId: category == null || subCategory == null
+                    ? ""
+                    : category!,
+                subCategId: subCategory == null ? "" : subCategory!,
               );
       }
     });
@@ -48,13 +55,14 @@ class _ImpactExchangeState extends State<ImpactExchange> {
       Provider.of<VoucherPro>(
         context,
         listen: false,
-      ).getVoucher(context: context, categId: "", fresh: true);
+      ).getVoucher(context: context, categId: "", fresh: true, subCategId: "");
     });
     super.initState();
   }
 
   final chips = ["All", "Fashion", "Personal Care", "Travel"];
   String? category;
+  String? subCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +140,7 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                               hint: Text(
                                 "Select Category",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: themewhitecolor.withOpacity(.8),
                                 ),
                               ),
@@ -187,30 +196,115 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                                       )
                                       .toList(),
                               onChanged: (item) {
+                                subCategory = null;
+
                                 category = item;
-                                if (select == 0) {
-                                  Provider.of<VoucherPro>(
-                                    context,
-                                    listen: false,
-                                  ).getVoucher(
-                                    fresh: true,
-                                    context: context,
-                                    categId: category == null ? "" : category!,
-                                  );
-                                } else {
-                                  Provider.of<VoucherPro>(
-                                    context,
-                                    listen: false,
-                                  ).getProducts(
-                                    fresh: true,
-                                    context: context,
-                                    categId: category == null ? "" : category!,
-                                  );
-                                }
+                                setState(() {});
+                                // if (select == 0) {
+                                //   Provider.of<VoucherPro>(
+                                //     context,
+                                //     listen: false,
+                                //   ).getVoucher(
+                                //     fresh: true,
+                                //     context: context,
+                                //     categId: category == null ? "" : category!,
+                                //   );
+                                // } else {
+                                //   Provider.of<VoucherPro>(
+                                //     context,
+                                //     listen: false,
+                                //   ).getProducts(
+                                //     fresh: true,
+                                //     context: context,
+                                //     categId: category == null ? "" : category!,
+                                //   );
+                                // }
                               },
                             ),
                           ),
                           15.kW,
+                    SizedBox(
+  height: 40,
+  width: 185,
+  child: DropdownButtonFormField<String>(
+    hint: Text(
+      "Select Subcategory",
+      style: TextStyle(
+        fontSize: 14,
+        color: themewhitecolor.withOpacity(.8),
+      ),
+    ),
+    iconDisabledColor: themewhitecolor,
+    iconEnabledColor: themewhitecolor,
+    decoration: InputDecoration(
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.white),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.white, width: 1.5),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.white),
+      ),
+      contentPadding: const EdgeInsets.all(8),
+    ),
+    value: subCategory, // must be null or match one item
+    dropdownColor: Palette.themecolor,
+    menuMaxHeight: 200,
+    isDense: true,
+    items: category == null
+        ? [] // no category selected yet
+        : Provider.of<CommonPro>(context, listen: false)
+            .categories
+            .firstWhere((element) => element.id == category)
+            .subcategories
+            .map(
+              (item) => DropdownMenuItem<String>(
+                value: item.id, // make sure type matches subCategory
+                child: SizedBox(
+                  width: 142,
+                  child: Text(
+                    item.name,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: themewhitecolor,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+    onChanged: (item) {
+      setState(() {
+        subCategory = item;
+      });
+
+      final voucherPro = Provider.of<VoucherPro>(context, listen: false);
+
+      if (select == 0) {
+        voucherPro.getVoucher(
+          fresh: true,
+          context: context,
+          categId: category ?? "",
+          subCategId: subCategory ?? "",
+        );
+      } else {
+        voucherPro.getProducts(
+          fresh: true,
+          context: context,
+          categId: category ?? "",
+          subCategId: subCategory ?? "",
+        );
+      }
+    },
+  ),
+),
+      15.kW,
                         ],
                       ),
 
@@ -240,9 +334,14 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                                         fresh: true,
 
                                         context: context,
-                                        categId: category == null
+                                        categId:
+                                            category == null ||
+                                                subCategory == null
                                             ? ""
                                             : category!,
+                                        subCategId: subCategory == null
+                                            ? ""
+                                            : subCategory!,
                                       );
                                     } else {
                                       Provider.of<VoucherPro>(
@@ -251,9 +350,14 @@ class _ImpactExchangeState extends State<ImpactExchange> {
                                       ).getProducts(
                                         fresh: true,
                                         context: context,
-                                        categId: category == null
+                                        categId:
+                                            category == null ||
+                                                subCategory == null
                                             ? ""
                                             : category!,
+                                        subCategId: subCategory == null
+                                            ? ""
+                                            : subCategory!,
                                       );
                                     }
                                   },

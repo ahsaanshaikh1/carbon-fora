@@ -458,19 +458,18 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                 index == 0
                                     ? Icons.directions_bike
                                     : index == 1
-                                        ? Icons.recycling
-                                        : index == 2
-                                            ? Icons.directions_walk
-                                            : index == 3
-                                                ? Icons.directions_transit
-                                                : index == 4
-                                                    ? Icons.change_circle
-                                                    : index == 5
-                                                        ? Icons.eco
-                                                        : index == 6
-                                                            ? Icons.water_drop
-                                                            : Icons
-                                                                .local_dining,
+                                    ? Icons.recycling
+                                    : index == 2
+                                    ? Icons.directions_walk
+                                    : index == 3
+                                    ? Icons.directions_transit
+                                    : index == 4
+                                    ? Icons.change_circle
+                                    : index == 5
+                                    ? Icons.eco
+                                    : index == 6
+                                    ? Icons.water_drop
+                                    : Icons.local_dining,
                                 color: Colors.white,
                                 size: 28,
                               ),
@@ -480,18 +479,18 @@ class _LogActionScreenState extends State<LogActionScreen> {
                                   index == 0
                                       ? "Bike"
                                       : index == 1
-                                          ? "Recycle"
-                                          : index == 2
-                                              ? "Walk"
-                                              : index == 3
-                                                  ? "Take Bus/Train"
-                                                  : index == 4
-                                                      ? "Buying Secondhand"
-                                                      : index == 5
-                                                          ? "Tree Plantation"
-                                                          : index == 6
-                                                              ? "Refill Water Bottles"
-                                                              : "Plant Based Meal",
+                                      ? "Recycle"
+                                      : index == 2
+                                      ? "Walk"
+                                      : index == 3
+                                      ? "Take Bus/Train"
+                                      : index == 4
+                                      ? "Buying Secondhand"
+                                      : index == 5
+                                      ? "Tree Plantation"
+                                      : index == 6
+                                      ? "Refill Water Bottles"
+                                      : "Plant Based Meal",
                                   maxLines: 1,
                                   softWrap: true,
                                   overflow: TextOverflow.ellipsis,
@@ -526,154 +525,143 @@ class _LogActionScreenState extends State<LogActionScreen> {
             selectedOption == null
                 ? 0.kH
                 : selectedOption != 1 && selectedOption != 4
-                    ? Column(
-                        children: List.generate(
-                          2,
-                          (indx) => Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.white12,
-                                borderRadius: BorderRadius.circular(12),
+                ? Column(
+                    children: List.generate(
+                      2,
+                      (indx) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white12,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: selectedOption == 0 || selectedOption == 2
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 0.319511 kg"
+                                      : "Value Earned: PKR 0.001955",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 3
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 0.066007 kg"
+                                      : "Value Earned: PKR 0.000403",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 5
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 10 kg"
+                                      : "Value Earned: PKR 0.0612",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 6
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 1.2 kg"
+                                      : "Value Earned: PKR 0.007344",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : selectedOption == 7
+                              ? Text(
+                                  indx == 0
+                                      ? "CO₂e Saved: 31.34 kg"
+                                      : "Value Earned: PKR 0.1918008",
+                                  style: const TextStyle(color: Colors.white),
+                                )
+                              : 0.kH,
+                        ),
+                      ),
+                    ),
+                  )
+                : selectedOption == 4
+                ? ListView.builder(
+                    itemCount: 8,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index1) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            secHandNam[index1],
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          10.kH,
+                          Column(
+                            children: List.generate(
+                              2,
+                              (indx) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0,
+                                ),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white12,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    indx == 0
+                                        ? secHandSavedEmission[index1]
+                                        : secHandEarning[index1],
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
                               ),
-                              child: selectedOption == 0 || selectedOption == 2
-                                  ? Text(
-                                      indx == 0
-                                          ? "CO₂e Saved: 0.319511 kg"
-                                          : "Value Earned: PKR 0.001955",
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    )
-                                  : selectedOption == 3
-                                      ? Text(
-                                          indx == 0
-                                              ? "CO₂e Saved: 0.066007 kg"
-                                              : "Value Earned: PKR 0.000403",
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        )
-                                      : selectedOption == 5
-                                          ? Text(
-                                              indx == 0
-                                                  ? "CO₂e Saved: 10 kg"
-                                                  : "Value Earned: PKR 0.0612",
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            )
-                                          : selectedOption == 6
-                                              ? Text(
-                                                  indx == 0
-                                                      ? "CO₂e Saved: 1.2 kg"
-                                                      : "Value Earned: PKR 0.007344",
-                                                  style: const TextStyle(
-                                                      color: Colors.white),
-                                                )
-                                              : selectedOption == 7
-                                                  ? Text(
-                                                      indx == 0
-                                                          ? "CO₂e Saved: 31.34 kg"
-                                                          : "Value Earned: PKR 0.1918008",
-                                                      style: const TextStyle(
-                                                          color: Colors.white),
-                                                    )
-                                                  : 0.kH,
                             ),
                           ),
-                        ),
-                      )
-                    : selectedOption == 4
-                        ? ListView.builder(
-                            itemCount: 8,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemBuilder: (context, index1) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    secHandNam[index1],
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                  10.kH,
-                                  Column(
-                                    children: List.generate(
-                                      2,
-                                      (indx) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0,
-                                        ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(14),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white12,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Text(
-                                            indx == 0
-                                                ? secHandSavedEmission[index1]
-                                                : secHandEarning[index1],
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  10.kH,
-                                ],
-                              );
-                            },
-                          )
-                        : ListView.builder(
-                            itemCount: 9,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemBuilder: (context, index1) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    materialsNam[index1],
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                  10.kH,
-                                  Column(
-                                    children: List.generate(
-                                      2,
-                                      (indx) => Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0,
-                                        ),
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: const EdgeInsets.all(14),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white12,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Text(
-                                            indx == 0
-                                                ? materialsSavedEmission[index1]
-                                                : materialsEarning[index1],
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  10.kH,
-                                ],
-                              );
-                            },
+                          10.kH,
+                        ],
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: 9,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemBuilder: (context, index1) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            materialsNam[index1],
+                            style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
+                          10.kH,
+                          Column(
+                            children: List.generate(
+                              2,
+                              (indx) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 5.0,
+                                ),
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(14),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white12,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    indx == 0
+                                        ? materialsSavedEmission[index1]
+                                        : materialsEarning[index1],
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          10.kH,
+                        ],
+                      );
+                    },
+                  ),
             25.kH,
             const Text(
               "Note: Based on average verified market rates. Actual value may vary.",
@@ -719,6 +707,13 @@ class _LogActionScreenState extends State<LogActionScreen> {
                 Text(
                   image == null ? "Take a Picture" : "Image captured",
                   style: TextStyle(color: Colors.white),
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    showProofUploadPopup(context);
+                  },
+                  child: Icon(Icons.info_outlined, color: Colors.white),
                 ),
               ],
             ),
@@ -867,14 +862,14 @@ class _LogActionScreenState extends State<LogActionScreen> {
                     selectedOption == 6
                         ? "Number of Bottles"
                         : selectedOption == 7
-                            ? "Weight"
-                            : selectedOption == 1
-                                ? "Mass"
-                                : selectedOption == 4
-                                    ? "Weight"
-                                    : selectedOption == 5
-                                        ? "Number of Trees"
-                                        : "",
+                        ? "Weight"
+                        : selectedOption == 1
+                        ? "Mass"
+                        : selectedOption == 4
+                        ? "Weight"
+                        : selectedOption == 5
+                        ? "Number of Trees"
+                        : "",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   )
                 : 0.kH,
@@ -914,132 +909,125 @@ class _LogActionScreenState extends State<LogActionScreen> {
                     ),
                   )
                 : selectedOption == 7
-                    ? Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white12,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextFormField(
-                          maxLines: 2,
-                          controller: fieldCtrl,
-                          style: TextStyle(color: Colors.white),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter a number";
-                            }
+                ? Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFormField(
+                      maxLines: 2,
+                      controller: fieldCtrl,
+                      style: TextStyle(color: Colors.white),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter a number";
+                        }
 
-                            final regex =
-                                RegExp(r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
+                        final regex = RegExp(r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
 
-                            if (!regex.hasMatch(value)) {
-                              return "Enter a valid positive number";
-                            }
+                        if (!regex.hasMatch(value)) {
+                          return "Enter a valid positive number";
+                        }
 
-                            return null;
-                          },
-                          decoration: InputDecoration.collapsed(
-                            hintText:
-                                "Weight of the plant-based meal in kilograms",
-                            hintStyle: TextStyle(color: Colors.white54),
-                          ),
-                        ),
-                      )
-                    : selectedOption == 1
-                        ? Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white12,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: TextFormField(
-                              maxLines: 2,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter a number";
-                                }
+                        return null;
+                      },
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Weight of the plant-based meal in kilograms",
+                        hintStyle: TextStyle(color: Colors.white54),
+                      ),
+                    ),
+                  )
+                : selectedOption == 1
+                ? Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFormField(
+                      maxLines: 2,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter a number";
+                        }
 
-                                // Regex: matches positive doubles (no negatives, no zero)
-                                final regex =
-                                    RegExp(r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
+                        // Regex: matches positive doubles (no negatives, no zero)
+                        final regex = RegExp(r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
 
-                                if (!regex.hasMatch(value)) {
-                                  return "Enter a valid positive number";
-                                }
+                        if (!regex.hasMatch(value)) {
+                          return "Enter a valid positive number";
+                        }
 
-                                return null;
-                              },
-                              controller: fieldCtrl,
-                              style: TextStyle(color: Colors.white),
-                              decoration: InputDecoration.collapsed(
-                                hintText:
-                                    "Mass of the recycled material in short tons",
-                                hintStyle: TextStyle(color: Colors.white54),
-                              ),
-                            ),
-                          )
-                        : selectedOption == 4
-                            ? Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white12,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: TextFormField(
-                                  maxLines: 2,
-                                  controller: fieldCtrl,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter a number";
-                                    }
+                        return null;
+                      },
+                      controller: fieldCtrl,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Mass of the recycled material in short tons",
+                        hintStyle: TextStyle(color: Colors.white54),
+                      ),
+                    ),
+                  )
+                : selectedOption == 4
+                ? Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFormField(
+                      maxLines: 2,
+                      controller: fieldCtrl,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter a number";
+                        }
 
-                                    // Regex: matches positive doubles (no negatives, no zero)
-                                    final regex = RegExp(
-                                        r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
+                        // Regex: matches positive doubles (no negatives, no zero)
+                        final regex = RegExp(r'^(?!0+(\.0+)?$)(\d+(\.\d+)?)$');
 
-                                    if (!regex.hasMatch(value)) {
-                                      return "Enter a valid positive number";
-                                    }
+                        if (!regex.hasMatch(value)) {
+                          return "Enter a valid positive number";
+                        }
 
-                                    return null;
-                                  },
-                                  style: TextStyle(color: Colors.white),
-                                  decoration: InputDecoration.collapsed(
-                                    hintText:
-                                        "Weight of the secondhand item in kilograms",
-                                    hintStyle: TextStyle(color: Colors.white54),
-                                  ),
-                                ),
-                              )
-                            : selectedOption == 5
-                                ? Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white12,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: TextFormField(
-                                      maxLines: 2,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "Please enter a number";
-                                        }
-                                        final regex = RegExp(r'^[1-9][0-9]*$');
-                                        if (!regex.hasMatch(value)) {
-                                          return "Enter a positive integer without leading zeros";
-                                        }
-                                        return null;
-                                      },
-                                      controller: fieldCtrl,
-                                      style: TextStyle(color: Colors.white),
-                                      decoration: InputDecoration.collapsed(
-                                        hintText: "Number of trees planted",
-                                        hintStyle:
-                                            TextStyle(color: Colors.white54),
-                                      ),
-                                    ),
-                                  )
-                                : 0.kH,
+                        return null;
+                      },
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Weight of the secondhand item in kilograms",
+                        hintStyle: TextStyle(color: Colors.white54),
+                      ),
+                    ),
+                  )
+                : selectedOption == 5
+                ? Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white12,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFormField(
+                      maxLines: 2,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please enter a number";
+                        }
+                        final regex = RegExp(r'^[1-9][0-9]*$');
+                        if (!regex.hasMatch(value)) {
+                          return "Enter a positive integer without leading zeros";
+                        }
+                        return null;
+                      },
+                      controller: fieldCtrl,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration.collapsed(
+                        hintText: "Number of trees planted",
+                        hintStyle: TextStyle(color: Colors.white54),
+                      ),
+                    ),
+                  )
+                : 0.kH,
             selectedOption == 1 || selectedOption == 4 ? 12.kH : 0.kH,
             selectedOption == 1 || selectedOption == 4
                 ? Column(
@@ -1049,8 +1037,8 @@ class _LogActionScreenState extends State<LogActionScreen> {
                         selectedOption == 1
                             ? "Material"
                             : selectedOption == 4
-                                ? "Fabric"
-                                : "",
+                            ? "Fabric"
+                            : "",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       12.kH,
@@ -1154,4 +1142,79 @@ class _LogActionScreenState extends State<LogActionScreen> {
       ),
     );
   }
+}
+
+void showProofUploadPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: const Text(
+          "Image Properties for Proof Uploads",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "📷 Image Properties:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Text("• Minimum Resolution: 800 × 600 pixels"),
+                Text("• Recommended Resolution: 1280 × 720 pixels"),
+                Text("• Maximum File Size: 5 MB"),
+                Text("• Accepted Formats: JPEG (.jpg), PNG (.png)"),
+                Text("• Orientation: Portrait or Landscape"),
+                Text("• Clarity: Main object must cover at least 40% of frame"),
+                SizedBox(height: 15),
+
+                Text(
+                  "✅ Activities List:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "• Bike → Central object (40%+ of frame), with background (street/parking/workplace).",
+                ),
+                Text(
+                  "• Recycle → Recycling bin logo + recyclables must be clear (not mixed with waste).",
+                ),
+                Text(
+                  "• Walk → If selfie, outdoor background must be identifiable.",
+                ),
+                Text(
+                  "• Take Bus/Train → Interior or ticket with readable date/text required.",
+                ),
+                Text(
+                  "• Buying Secondhand → Photo of item OR receipt with date, store name & item details.",
+                ),
+                Text(
+                  "• Tree Plantation → Sapling + soil + person visible, sapling at least 30%.",
+                ),
+                Text(
+                  "• Refill Water Bottle → Reusable bottle + refill source visible (no single-use bottles).",
+                ),
+                Text(
+                  "• Plant-Based Meal → Meal clear & 40%+ of frame; optional menu photo for ingredients.",
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Close"),
+          ),
+        ],
+      );
+    },
+  );
 }
